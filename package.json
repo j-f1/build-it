@@ -1,0 +1,16 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "test": "standard",
+    "start": "electron ."
+  },
+  "author": "Jed Fox",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.4.13",
+    "standard": "^8.6.0"
+  }
+}
