@@ -6,7 +6,8 @@
   "scripts": {
     "test": "standard",
     "start": "electron .",
-    "watch": "sass --watch ui/index.scss:ui/index.css"
+    "watch": "sass --watch ui/index.scss:ui/index.css",
+    "pack": "webpack --watch --progress"
   },
   "author": "Jed Fox",
   "license": "ISC",
