@@ -6,47 +6,10 @@
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-    <header>
-      <div>
-        <section>
-          <span class="indicator">3</span>
-          <span class="status">Building Update iOS: cocos2d-ios<span class="|"></span>Compiling 33 of 138 source files</span>
-          <span class="issues">
-            <a class="warnings"><i class="fa fa-warning"></i> 5</a>
-            <!-- <a class="errors"><i class="fa fa-exclamation-circle"></i> 3</a> -->
-          </span>
-          <span class="progress"><span class="bar" style="width: 0%"></span></span>
-        </section>
-        <ul class="active dropdown">
-          <li>
-            Indexing Text<span class="|"></span>Paused
-            <span class="progress"><span class="bar" style="width: 51%;"></span></span>
-          </li>
-          <li>
-            Indexing<span class="|"></span>Processing Files
-            <span class="progress"><span class="bar" style="width: 1%;"></span></span>
-          </li>
-        </ul>
-      </div>
-      <button>Clicky</button>
-    </header>
-  </body>
-
+    <main></main>
+  <script src="index.js" charset="utf-8"></script>
   <script>
     window.addEventListener('focus', () => document.documentElement.classList.remove('blurred'))
     window.addEventListener('blur', () => document.documentElement.classList.add('blurred'))
-
-    document.querySelector('button').addEventListener('click', function () {
-      const indicator = document.querySelector('.indicator')
-      indicator.textContent = indicator.textContent ? '' : '2'
-    })
-    document.querySelector('.indicator').addEventListener('click', function () {
-      document.querySelector('.dropdown').classList.toggle('active')
-      // document.querySelector('.progress').style.width = +document.querySelector('.progress').style.width.slice(0, -1) + 10 + '%'
-    })
-
-    require('prefixfree')
-    // You can also require other files to run in this process
-    require('./renderer.js')
   </script>
 </html>
