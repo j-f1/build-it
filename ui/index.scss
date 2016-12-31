@@ -1,5 +1,4 @@
-$indicator-speed: 0.1s;
-
+$indicator-speed: 0.15s;
 
 $progress-bg: #177DFA;
 
@@ -104,6 +103,7 @@ header {
     margin: 0 0.75em;
     background: currentColor;
     vertical-align: middle;
+    margin-top: -2px;
     @media screen and (min-resolution: 2dppx) {
       transform: scaleX(0.5);
     }
@@ -112,6 +112,7 @@ header {
     position: relative;
     margin: 0 7px;
     section {
+      transform: translate3d(0, 0, 0); // stop the corner of the progress bar from breaking out when fading.
       // @media screen and (min-resolution: 2dppx) {
       //   width: 1024px;
       // }
