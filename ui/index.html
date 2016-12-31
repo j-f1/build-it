@@ -9,6 +9,7 @@
     <main></main>
   <script src="index.js" charset="utf-8"></script>
   <script>
+    document.documentElement.classList.toggle('blurred', require('electron').remote.getCurrentWindow().isFocused())
     window.addEventListener('focus', () => document.documentElement.classList.remove('blurred'))
     window.addEventListener('blur', () => document.documentElement.classList.add('blurred'))
   </script>
