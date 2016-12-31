@@ -142,7 +142,7 @@ header {
         &:active {
           background: #636363;
         }
-        &:empty {
+        &:empty, &.hidden {
           transform: scale(0);
           color: transparent;
           width: 0;
