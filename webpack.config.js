@@ -24,8 +24,7 @@ const devPlugins = [
   new webpack.LoaderOptionsPlugin({
     minimize: false,
     debug: true
-  }),
-  uglify
+  })
 ]
 
 module.exports = (envArg) => {
@@ -35,6 +34,7 @@ module.exports = (envArg) => {
   console.log(`Environment: \u001b[1m${env}\u001b[22m`)
 
   const conf = {
+    target: 'electron',
     entry: ['prefixfree', './ui/js/index.js'],
     output: {
       filename: './ui/index.js'
