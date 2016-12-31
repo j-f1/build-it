@@ -9,6 +9,9 @@ $warning-pressed: #80630D;
 $error: #E21414;
 $error-pressed: #710D0D;
 
+$info: $progress-bg;
+$info-pressed: darken($info, 33%);
+
 * {
   box-sizing: border-box;
 }
@@ -78,7 +81,7 @@ header {
       border-top-color: hsl(0, 0%, 80%);
       border-bottom-color: hsl(0, 0%, 65%);
     }
-    button:active {
+    &:not(section):active {
       background: linear-gradient(hsl(0, 0%, 89%), hsl(0, 0%, 86%));
       box-shadow: hsla(0, 0%, 0%, 0.3) 0 1px 1px -1px, inset 0 1px 1px -1px white;
     }
@@ -181,6 +184,23 @@ header {
           &:active i {
             transition: none;
           }
+
+          &.notices, &.errors {
+            i {
+              font-size: 1.5em;
+              margin-right: 2px;
+              margin-top: 0;
+            }
+          }
+
+          &.notices {
+            i {
+              color: $info;
+            }
+            &:active i {
+              color: $info-pressed;
+            }
+          }
           &.warnings {
             i {
               color: $warning;
@@ -189,13 +209,9 @@ header {
               color: $warning-pressed;
             }
           }
-
           &.errors {
             i {
               color: $error;
-              font-size: 1.5em;
-              margin-right: 2px;
-              margin-top: 0;
             }
             &:active i {
               color: $error-pressed;
@@ -204,15 +220,15 @@ header {
         }
       } // .issues
 
-      .progress {
+      .progress .bar {
         position: absolute;
         bottom: 0;
         left: 0;
         height: 2px;
         background: $progress-bg;
         transition:
-        width 0.4s cubic-bezier(0.250,  0.460, 0.450, 0.940),
-        opacity 0.4s,
+          width 0.4s cubic-bezier(0.250,  0.460, 0.450, 0.940),
+          opacity 0.4s,
         ;
         &.hidden {
           opacity: 0;
