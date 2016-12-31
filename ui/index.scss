@@ -1,4 +1,5 @@
 $indicator-speed: 0.15s;
+$duration: 0.4s;
 
 $progress-bg: #177DFA;
 
@@ -228,8 +229,8 @@ header {
         height: 2px;
         background: $progress-bg;
         transition:
-          width 0.4s cubic-bezier(0.250,  0.460, 0.450, 0.940),
-          opacity 0.4s,
+          width $duration cubic-bezier(0.250,  0.460, 0.450, 0.940),
+          opacity $duration,
         ;
         &.hidden {
           opacity: 0;
@@ -251,7 +252,7 @@ header {
       box-shadow: 0 0 1em rgba(0, 0, 0, 0.3);
       list-style-type: none;
       transition-property: transform, box-shadow, opacity;
-      transition-duration: 0.4s;
+      transition-duration: $duration;
 
       transform-origin: center 0;
       transform: perspective(500px);
