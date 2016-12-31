@@ -5,9 +5,14 @@ let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    titleBarStyle: 'hidden-inset'
+    width: 400,
+    height: 36,
+    titleBarStyle: 'hidden-inset',
+    alwaysOnTop: true,
+    resizable: false,
+    fullscreenable: false,
+    maximizable: false,
+    minWidth: 350
   })
 
   mainWindow.loadURL(`file://${__dirname}/ui/index.html`)

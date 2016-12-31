@@ -6,12 +6,16 @@ import WebpackHandler from './webpack'
 import fs from 'fs'
 import vm from 'vm'
 import moment from 'moment'
+import { fa } from './util'
+import { remote } from 'electron'
 
 class App extends React.Component {
   constructor (...args) {
     super(...args)
+    this.toggleWindow = this.toggleWindow.bind(this)
     this.state = {
-      stats: {compilation: {warnings: [], errors: []}}
+      stats: {compilation: {warnings: [], errors: []}},
+      expanded: false
     }
   }
   componentDidMount () {
@@ -44,6 +48,23 @@ class App extends React.Component {
       }, 400)
     })
   }
+  toggleWindow () {
+    this.setState(({ expanded }) => ({
+      expanded: !expanded
+    }))
+    const w = remote.getCurrentWindow()
+    if (!this.state.expanded) {
+      // expand!
+      document.documentElement.classList.remove('mini')
+      w.setSize(700, 500, true)
+      w.setResizable(true)
+    } else {
+      // shrink!
+      document.documentElement.classList.add('mini')
+      w.setSize(400, 36, true)
+      w.setResizable(false)
+    }
+  }
   render () {
     return <main>
       <TitleBar
@@ -62,6 +83,7 @@ class App extends React.Component {
             }
           }
         }}
+        rightItems={<button onClick={this.toggleWindow}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></button>}
       />
     </main>
   }
