@@ -2,50 +2,66 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import TitleBar from './title-bar'
 import Task from './task'
+import WebpackHandler from './webpack'
+import fs from 'fs'
+import vm from 'vm'
+import moment from 'moment'
 
 class App extends React.Component {
   constructor (...args) {
     super(...args)
-    this._toggleTasks = this._toggleTasks.bind(this)
-    this._fullTasks = [
-      new Task({ label: <span>Building Update iOS: cocos2d-ios<span className='|' />Compiling 33 of 138 source files</span>, progress: 0.5 }),
-      new Task({ label: <span>Indexing Text<span className='|' />Paused</span>, progress: 0.51 }),
-      new Task({ label: <span>Indexing<span className='|' />Processing Files</span>, progress: 0.01 })
-    ]
     this.state = {
-      tasks: this._fullTasks.slice()
+      stats: {compilation: {warnings: [], errors: []}}
     }
   }
-  _toggleTasks () {
-    this.setState(({ tasks }) => ({
-      tasks: tasks.length ? [] : this._fullTasks.slice()
-    }))
+  componentDidMount () {
+    const content = fs.readFileSync('webpack.config.js', 'utf-8')
+    const config = vm.runInThisContext(content)
+    this.webpack = new WebpackHandler({config})
+    this.webpack.task.on((x, y, task) => {
+      this.setState({task})
+    })
+    this.webpack.compiler.watch({}, (err, stats) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      this.setState({stats})
+      const time = moment().calendar()
+      setTimeout(() => {
+        this.setState({
+          task: new Task({
+            label: [
+              <span>
+                Build <strong>
+                  {stats.compilation.errors.length ? 'Failed' : 'Succeeded'}</strong>
+              </span>,
+              time],
+            progress: 1
+          })
+        })
+        process.nextTick(() => this.setState({task: null}))
+      }, 400)
+    })
   }
   render () {
     return <main>
       <TitleBar
-        tasks={this.state.tasks}
+        tasks={this.state.task ? [this.state.task] : []}
         issues={{
           warnings: {
-            count: 3,
+            count: this.state.stats.compilation.warnings.length,
             click () {
               console.warn('you’ve been warned!')
             }
           },
           errors: {
-            count: 4,
+            count: this.state.stats.compilation.errors.length,
             click () {
               console.error('Oh noes!')
             }
-          },
-          notices: {
-            count: 2,
-            click () {
-              console.info('hi!')
-            }
           }
         }}
-        rightItems={<button onClick={this._toggleTasks}>Clicky</button>}
       />
     </main>
   }
@@ -54,3 +70,6 @@ ReactDOM.render(
   <App />,
   document.querySelector('main')
 )
+import Observable from './observable'
+window.WebpackHandler = WebpackHandler
+window.Observable = Observable

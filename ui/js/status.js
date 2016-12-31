@@ -31,14 +31,19 @@ export default class Status extends React.Component {
   }
   [_.renderIssues] () {
     const { issues } = this.props
-    return Object.keys(issues).map(key => <a key={key} className={cx(key)} onClick={issues[key].click}>
-      <i className={fa(issues[key].icon || icons[key] || key)} />
-      {' ' + (issues[key].count || issues[key])}
-    </a>)
+    return Object.keys(issues).map(key => {
+      if (issues[key].count === 0) {
+        return null
+      }
+      return <a key={key} className={cx(key)} onClick={issues[key].click}>
+        <i className={fa(issues[key].icon || icons[key] || key)} />
+        {' ' + (typeof issues[key].count === 'number' ? issues[key].count : issues[key])}
+      </a>
+    })
   }
   [_.renderDropDown] () {
     return this.props.tasks.slice(1).map(task => <li key={task.id}>
-      {task.label}
+      {task.labelJSX}
       <ProgressBar progress={task.progress} />
     </li>)
   }
@@ -62,7 +67,7 @@ export default class Status extends React.Component {
           {tasks.length || this.state.lastCount}
         </span>
         <span className='status'>
-          {(tasks[0] || this.state.lastTask).label}
+          {(tasks[0] || this.state.lastTask || {}).labelJSX}
         </span>
         <span className='issues'>
           {this[_.renderIssues]()}
