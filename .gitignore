@@ -2,3 +2,4 @@ node_modules
 .sass-cache
 index.css*
 ui/index.js*
+/report.html
