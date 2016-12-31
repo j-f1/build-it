@@ -6,7 +6,7 @@
   "scripts": {
     "test": "standard",
     "start": "electron .",
-    "watch": "sass --watch index.scss:index.css"
+    "watch": "sass --watch ui/index.scss:ui/index.css"
   },
   "author": "Jed Fox",
   "license": "ISC",
