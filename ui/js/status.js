@@ -1,5 +1,5 @@
 import React from 'react'
-import { classJoin as cx } from 'css-classname'
+import { cx, fa } from './util'
 import ProgressBar from './progress-bar'
 
 const _ = {
@@ -32,7 +32,7 @@ export default class Status extends React.Component {
   [_.renderIssues] () {
     const { issues } = this.props
     return Object.keys(issues).map(key => <a key={key} className={cx(key)} onClick={issues[key].click}>
-      <i className={cx('fa', 'fa-' + (issues[key].icon || icons[key] || key))} />
+      <i className={fa(issues[key].icon || icons[key] || key)} />
       {' ' + (issues[key].count || issues[key])}
     </a>)
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { classJoin as cx } from 'css-classname'
+import { cx } from './util'
 
 export default function ProgressBar ({ progress, percent = 0, visible = true }) {
   return <span className={cx('progress', {'hidden': !visible})}>
