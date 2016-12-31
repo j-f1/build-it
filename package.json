@@ -5,12 +5,16 @@
   "main": "main.js",
   "scripts": {
     "test": "standard",
-    "start": "electron ."
+    "start": "electron .",
+    "watch": "sass --watch index.scss:index.css"
   },
   "author": "Jed Fox",
   "license": "ISC",
   "devDependencies": {
     "electron": "^1.4.13",
     "standard": "^8.6.0"
+  },
+  "dependencies": {
+    "prefixfree": "^1.0.0"
   }
 }
