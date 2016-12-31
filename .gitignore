@@ -1,3 +1,4 @@
 node_modules
-.sass-cache/**
+.sass-cache
 index.css*
+ui/index.js*
