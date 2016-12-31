@@ -88,10 +88,8 @@ class App extends React.Component {
     </main>
   }
 }
+
 ReactDOM.render(
   <App />,
   document.querySelector('main')
 )
-import Observable from './observable'
-window.WebpackHandler = WebpackHandler
-window.Observable = Observable
