@@ -27,11 +27,29 @@ const devPlugins = [
   })
 ]
 
+const getExternals = (modules) => {
+  const ob = {}
+  modules.forEach(name => {
+    ob[name] = `require("${name.replace('"', '\\"')}")`
+  })
+  return ob
+}
+
 module.exports = (envArg) => {
   const env = (process.env.NODE_ENV || envArg === 'prod' ? 'production' : envArg || 'development').toLowerCase()
   const dev = env === 'development'
   const prod = env === 'production'
-  console.log(`Environment: \u001b[1m${env}\u001b[22m`)
+  console.log('Environment: \u001b[1m' + env + '\u001b[22m')
+
+  let pkg
+
+  try {
+    pkg = require('./package')
+  } catch (e) {
+    pkg = require('../package')
+  }
+
+  const externals = getExternals(Object.keys(pkg.dependencies))
 
   const conf = {
     target: 'electron',
@@ -39,6 +57,7 @@ module.exports = (envArg) => {
     output: {
       filename: './ui/index.js'
     },
+    externals,
     module: {
       rules: [
         {
@@ -59,7 +78,7 @@ module.exports = (envArg) => {
         },
         {
           test: /\.json$/,
-          loader: 'json-loadeer'
+          loader: 'json-loader'
         }
       ]
     },
@@ -68,9 +87,9 @@ module.exports = (envArg) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        'process.env': {
+        'process.env': `(${JSON.stringify({
           NODE_ENV: JSON.stringify(env)
-        }
+        })})`
       }),
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',
