@@ -21,9 +21,11 @@ body {
   margin: 0;
   font-family: SF UI Text, San Fransico Text, San Francisco, Helvetica Neue, Helvetica, Segoe UI, sans-serif;
   user-select: none;
+  overflow: hidden;
 }
 
 header {
+  padding-left: 71px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,19 +114,21 @@ header {
   >div {
     position: relative;
     margin: 0 7px;
+    flex: 1;
+    max-width: calc(100vw - 100px);
     section {
       transform: translate3d(0, 0, 0); // stop the corner of the progress bar from breaking out when fading.
       // @media screen and (min-resolution: 2dppx) {
       //   width: 1024px;
       // }
-      margin: 0;
-      width: 512px;
+      margin: 0 auto;
+      max-width: 512px;
       display: flex;
       align-items: center;
       padding: 3px 8px;
       font-size: 0.865em;
       position: relative;
-      overflow: hidden;
+      overflow: auto;
 
       .indicator {
         display: flex;
