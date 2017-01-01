@@ -9,8 +9,17 @@
     <main></main>
   <script src="index.js" charset="utf-8"></script>
   <script>
-    document.documentElement.classList.toggle('blurred', require('electron').remote.getCurrentWindow().isFocused())
-    window.addEventListener('focus', () => document.documentElement.classList.remove('blurred'))
-    window.addEventListener('blur', () => document.documentElement.classList.add('blurred'))
+    {
+      const win = require('electron').remote.getCurrentWindow()
+      win.setAlwaysOnTop(true, 'status')
+      document.documentElement.classList.toggle('blurred', !win.isFocused())
+      const focus = () => document.documentElement.classList.remove('blurred')
+      const blur = () => document.documentElement.classList.add('blurred')
+      win.on('focus', focus).on('blur', blur)
+      window.addEventListener('beforeunload', () => {
+        win.removeListener('focus', focus)
+        win.removeListener('blur', blur)
+      })
+    }
   </script>
 </html>
