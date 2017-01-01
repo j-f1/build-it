@@ -1,30 +1,27 @@
 import cloneDeep from 'lodash.clonedeep'
-const _ = {
-  value: new WeakMap(),
-  listeners: new WeakMap()
-}
-export default class Observable {
+import EventEmitter from 'events'
+
+const _value = new WeakMap()
+
+export default class Observable extends EventEmitter {
   /**
    * Value: any
-   * listener: (Observable, oldVal, newVal)
+   * listener: (oldVal, newVal)
    */
   constructor (value) {
-    _.listeners.set(this, new Set())
+    super()
     this.value = value // convenience
   }
-  on (listener) {
-    _.listeners.get(this).add(listener)
-  }
-  off (listener) {
-    return _.listeners.get(this).remove(listener)
+  off (...args) {
+    this.removeListener(...args)
   }
   get value () {
-    return cloneDeep(_.value.get(this))
+    return cloneDeep(_value.get(this))
   }
   set value (newVal) {
-    const old = _.value.get(this)
-    _.value.set(this, cloneDeep(newVal))
-    _.listeners.get(this).forEach(listener => listener(this, old, newVal))
+    const old = _value.get(this)
+    _value.set(this, cloneDeep(newVal))
+    this.emit('change', old, newVal)
   }
   toString () {
     return `Observable <${this.value}>`

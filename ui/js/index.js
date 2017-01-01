@@ -23,7 +23,7 @@ class App extends React.Component {
     const content = fs.readFileSync('webpack.config.js', 'utf-8')
     const config = vm.runInThisContext(content)
     this.webpack = new WebpackHandler({config})
-    this.webpack.task.on((x, y, task) => {
+    this.webpack.task.on('change', (x, y, task) => {
       this.setState({task})
     })
     this.webpack.compiler.watch({}, (err, stats) => {
