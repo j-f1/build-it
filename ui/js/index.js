@@ -8,9 +8,7 @@ import vm from 'vm'
 import moment from 'moment'
 import { fa } from './util'
 import { remote } from 'electron'
-
-const EXPANDED_SIZE = {w: 700, h: 500}
-const SMALL_SIZE = {w: 400, h: 36}
+import { expand, shrink } from './resizer'
 
 class App extends React.Component {
   constructor (...args) {
@@ -57,25 +55,11 @@ class App extends React.Component {
     }))
     const w = remote.getCurrentWindow()
     if (!this.state.expanded) {
-      // expand!
       document.documentElement.classList.remove('mini')
-      const bounds = w.getBounds()
-      if ((bounds.x + EXPANDED_SIZE.w) > window.screen.width) {
-        w.setBounds({
-          x: bounds.x + window.screen.width - (bounds.x + EXPANDED_SIZE.w),
-          y: bounds.y,
-          width: EXPANDED_SIZE.w,
-          height: EXPANDED_SIZE.h
-        }, true)
-      } else {
-        w.setSize(EXPANDED_SIZE.w, EXPANDED_SIZE.h, true)
-      }
-      w.setResizable(true)
+      expand(w)
     } else {
-      // shrink!
       document.documentElement.classList.add('mini')
-      w.setSize(SMALL_SIZE.w, SMALL_SIZE.h, true)
-      w.setResizable(false)
+      shrink(w)
     }
   }
   render () {
