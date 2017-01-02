@@ -1,13 +1,11 @@
 import { remote } from 'electron'
 import ReactDOM from 'react-dom'
-import moment from 'moment'
 import React from 'react'
 
 import { expand, shrink } from './resizer'
-import WebpackHandler from './webpack'
+import { WebpackHandler } from './builders'
 import TitleBar from './title-bar'
 import { fa } from './util'
-import Task from './task'
 
 class App extends React.Component {
   constructor (...args) {
@@ -32,21 +30,11 @@ class App extends React.Component {
         return
       }
       this.setState({stats})
-      const time = moment().calendar()
-      setTimeout(() => {
-        this.setState({
-          task: new Task({
-            label: [
-              <span>
-                Build <strong>
-                  {stats.compilation.errors.length ? 'Failed' : 'Succeeded'}</strong>
-              </span>,
-              time],
-            progress: 1
-          })
-        })
-        process.nextTick(() => this.setState({task: null}))
-      }, 400)
+      this.webpack.task.once('change', () => {
+        process.nextTick(() => this.setState({
+          task: null
+        }))
+      })
     })
   }
   toggleWindow () {

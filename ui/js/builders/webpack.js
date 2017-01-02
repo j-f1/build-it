@@ -3,10 +3,10 @@ import vm from 'vm'
 
 import webpack, { ProgressPlugin } from 'webpack'
 import clone from 'lodash.clonedeep'
+import titleCase from 'title-case'
 import ify from 'promisify-node'
 
-import Builder from './builder'
-import Task from './task'
+import Builder from './util/builder'
 
 function transform (config, opts) {
   if (typeof config === 'function') {
@@ -26,26 +26,24 @@ function _transform (config, { progress }) {
 export default class WebpackHandler extends Builder {
   constructor (opts) {
     super(opts, {
-      configPath: null,
-      task: 'Building'
+      configPath: null
     })
   }
   async init () {
     const content = fs.readFileSync(this.opts.configPath, 'utf-8')
     this.config = vm.runInThisContext(content)
     this.compiler = webpack(transform(this.config, {
-      progress: this.updateProgress.bind(this)
+      progress: (progress, message) => this.updateProgress({
+        progress,
+        message: titleCase(message)
+      })
     }))
-    if (!Array.isArray(this.opts.task)) {
-      this.opts.task = [this.opts.task]
-    }
-    this.task.value = new Task({
-      label: [...this.opts.task, 'Initializing'],
-      progress: 0
-    })
   }
   async start () {
-    this._stop = this.compiler.watch({}, (...args) => this.emit('built', ...args)).close
+    this._stop = this.compiler.watch({}, (...args) => {
+      this.stats = args[1]
+      this.emit('built', ...args)
+    }).close
   }
   async stop () {
     if (!this._stop) {
@@ -54,5 +52,27 @@ export default class WebpackHandler extends Builder {
     await ify(this._stop)()
     this._stop = null
     return true
+  }
+  buildOK () {
+    if (!this.stats) {
+      return undefined
+    }
+    return !!this.errors.length
+  }
+
+  get notices () {
+    return []
+  }
+  get warnings () {
+    if (!this.stats) {
+      return []
+    }
+    return this.stats.compilation.warnings
+  }
+  get errors () {
+    if (!this.stats) {
+      return []
+    }
+    return this.stats.compilation.errors
   }
 }
