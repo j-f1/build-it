@@ -48,10 +48,10 @@ export default class Builder extends EventEmitter {
   toString () {
     return this.constructor.name + ': ' + this.task.value.toString()
   }
-  updateProgress ({ percent, message }) {
+  updateProgress ({ progress, message }) {
     const task = this.task.value
-    if (percent) {
-      task.progress = percent
+    if (progress) {
+      task.progress = progress
     }
     if (message) {
       task.label = task.label.slice(0, -1).concat(message)
