@@ -12,25 +12,29 @@ class App extends React.Component {
     super(...args)
     this.toggleWindow = this.toggleWindow.bind(this)
     this.state = {
-      stats: {compilation: {warnings: [], errors: []}},
       expanded: false
     }
   }
-  componentDidMount () {
-    this.webpack = new WebpackHandler({
+  componentWillMount () {
+    const webpack = new WebpackHandler({
+      // from: 'ui/index.scss',
+      // to: 'ui/index.css'
       configPath: 'webpack.config.js'
     })
-    this.webpack.init().then(() => this.webpack.start())
-    this.webpack.task.on('change', (old, task) => {
+    this.setState({
+      webpack
+    })
+    webpack.init().then(() => webpack.start())
+    webpack.task.on('change', (old, task) => {
       this.setState({task})
     })
-    this.webpack.on('built', (err, stats) => {
+    webpack.on('built', (err, stats) => {
       if (err) {
         console.error(err)
         return
       }
-      this.setState({stats})
-      this.webpack.task.once('change', () => {
+      this.setState({ stats, webpack: this.state.webpack })
+      webpack.task.once('change', () => {
         process.nextTick(() => this.setState({
           task: null
         }))
@@ -56,13 +60,13 @@ class App extends React.Component {
         tasks={this.state.task ? [this.state.task] : []}
         issues={{
           warnings: {
-            count: this.state.stats.compilation.warnings.length,
+            count: this.state.webpack.warnings.length,
             click () {
               console.warn('you’ve been warned!')
             }
           },
           errors: {
-            count: this.state.stats.compilation.errors.length,
+            count: this.state.webpack.errors.length,
             click () {
               console.error('Oh noes!')
             }
