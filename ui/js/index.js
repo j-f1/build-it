@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import TitleBar from './title-bar'
 import Task from './task'
 import WebpackHandler from './webpack'
-import fs from 'fs'
-import vm from 'vm'
 import moment from 'moment'
 import { fa } from './util'
 import { remote } from 'electron'
@@ -20,13 +18,14 @@ class App extends React.Component {
     }
   }
   componentDidMount () {
-    const content = fs.readFileSync('webpack.config.js', 'utf-8')
-    const config = vm.runInThisContext(content)
-    this.webpack = new WebpackHandler({config})
-    this.webpack.task.on('change', (x, y, task) => {
+    this.webpack = new WebpackHandler({
+      configPath: 'webpack.config.js'
+    })
+    this.webpack.init().then(() => this.webpack.start())
+    this.webpack.task.on('change', (old, task) => {
       this.setState({task})
     })
-    this.webpack.compiler.watch({}, (err, stats) => {
+    this.webpack.on('built', (err, stats) => {
       if (err) {
         console.error(err)
         return

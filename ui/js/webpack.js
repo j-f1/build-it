@@ -1,47 +1,58 @@
+import fs from 'fs'
+import vm from 'vm'
+
 import webpack, { ProgressPlugin } from 'webpack'
 import clone from 'lodash.clonedeep'
-import titleCase from 'title-case'
+import ify from 'promisify-node'
 
-import Observable from './observable'
-import Task from './task.js'
+import Builder from './builder'
+import Task from './task'
 
-export default class WebpackHandler {
-  static transform (config, opts) {
-    if (typeof config === 'function') {
-      return WebpackHandler.transform(config(opts.env), opts)
-    }
-    if (Array.isArray(config)) {
-      return config.map(clone).map(conf => WebpackHandler._transform(conf, opts))
-    }
-    return WebpackHandler._transform(clone(config), opts)
+function transform (config, opts) {
+  if (typeof config === 'function') {
+    return transform(config(opts.env), opts)
   }
-  static _transform (config, { progress }) {
-    if (!config.plugins) config.plugins = []
-    config.plugins.unshift(new ProgressPlugin(progress))
-    return config
+  if (Array.isArray(config)) {
+    return config.map(clone).map(conf => _transform(conf, opts))
   }
-  constructor ({ config, task = 'Building' }) {
-    this.compiler = webpack(WebpackHandler.transform(config, {
-      progress: this._progress.bind(this)
+  return _transform(clone(config), opts)
+}
+function _transform (config, { progress }) {
+  if (!config.plugins) config.plugins = []
+  config.plugins.unshift(new ProgressPlugin(progress))
+  return config
+}
+
+export default class WebpackHandler extends Builder {
+  constructor (opts) {
+    super(opts, {
+      configPath: null,
+      task: 'Building'
+    })
+  }
+  async init () {
+    const content = fs.readFileSync(this.opts.configPath, 'utf-8')
+    this.config = vm.runInThisContext(content)
+    this.compiler = webpack(transform(this.config, {
+      progress: this.updateProgress.bind(this)
     }))
-    if (!Array.isArray(task)) {
-      task = [task]
+    if (!Array.isArray(this.opts.task)) {
+      this.opts.task = [this.opts.task]
     }
-    this.task = new Observable()
     this.task.value = new Task({
-      label: [...task, 'Initializing'],
+      label: [...this.opts.task, 'Initializing'],
       progress: 0
     })
   }
-  _progress (percent, message) {
-    const task = this.task.value
-    task.progress = percent
-    if (message) {
-      task.label = task.label.slice(0, -1).concat(titleCase(message))
-    }
-    this.task.value = task
+  async start () {
+    this._stop = this.compiler.watch({}, (...args) => this.emit('built', ...args)).close
   }
-  toString () {
-    return 'webpack:'
+  async stop () {
+    if (!this._stop) {
+      return false
+    }
+    await ify(this._stop)()
+    this._stop = null
+    return true
   }
 }
