@@ -1,7 +1,7 @@
-export let EXPANDED_SIZE = {w: 700, h: 500}
-export let SMALL_SIZE = {w: 400, h: 36}
+let EXPANDED_SIZE = {w: 700, h: 500}
+let SMALL_SIZE = {w: 400, h: 36}
 
-export function expand (w) {
+function expand (w) {
   const bounds = w.getBounds()
   if ((bounds.x + EXPANDED_SIZE.w) > window.screen.width) {
     w.setBounds({
@@ -16,7 +16,14 @@ export function expand (w) {
   w.setResizable(true)
 }
 
-export function shrink (w) {
+function shrink (w) {
   w.setSize(SMALL_SIZE.w, SMALL_SIZE.h, true)
   w.setResizable(false)
+}
+
+module.exports = {
+  EXPANDED_SIZE,
+  SMALL_SIZE,
+  expand,
+  shrink
 }
