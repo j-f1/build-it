@@ -1,18 +1,20 @@
 const { app, BrowserWindow } = require('electron')
 const { REACT_DEVELOPER_TOOLS, REACT_PERF, default: installExtension } = require('electron-devtools-installer')
+const { SMALL_SIZE } = require('./ui/js/resizer')
 
 let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 400,
-    height: 36,
+    width: SMALL_SIZE.w,
+    height: SMALL_SIZE.h,
     titleBarStyle: 'hidden-inset',
     alwaysOnTop: true,
     resizable: false,
     fullscreenable: false,
     maximizable: false,
-    minWidth: 350
+    minWidth: SMALL_SIZE.w,
+    minHeight: SMALL_SIZE.h
   })
 
   mainWindow.loadURL(`file://${__dirname}/ui/index.html`)
