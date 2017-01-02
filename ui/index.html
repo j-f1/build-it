@@ -7,19 +7,51 @@
   </head>
   <body>
     <main></main>
-  <script src="index.js" charset="utf-8"></script>
   <script>
     {
+      const EventEmitter = require('events')
+      class FocusHandler extends EventEmitter {
+        constructor (win) {
+          super()
+
+          const focus = () => this.emit('focus')
+          const blur = () => this.emit('blur')
+          win.on('focus', focus).on('blur', blur)
+          window.addEventListener('beforeunload', () => {
+            win.removeListener('focus', focus)
+            win.removeListener('blur', blur)
+          })
+
+          process.nextTick(() => {
+            if (win.isFocused()) {
+              this.emit('focus')
+            } else {
+              this.emit('blur')
+            }
+          })
+
+          this._f = win.isFocused()
+          this
+            .on('focus', () => { this._f = true })
+            .on('blur', () => { this._f = false })
+        }
+        get focused () {
+          return this._f
+        }
+        get blurred () {
+          return !this._f
+        }
+      }
+
       const win = require('electron').remote.getCurrentWindow()
+      window.focusHandler = new FocusHandler(win)
       win.setAlwaysOnTop(true, 'status')
-      document.documentElement.classList.toggle('blurred', !win.isFocused())
-      const focus = () => document.documentElement.classList.remove('blurred')
-      const blur = () => document.documentElement.classList.add('blurred')
-      win.on('focus', focus).on('blur', blur)
-      window.addEventListener('beforeunload', () => {
-        win.removeListener('focus', focus)
-        win.removeListener('blur', blur)
-      })
     }
+
+    window.focusHandler
+      .on('focus', () => document.documentElement.classList.remove('blurred'))
+      .on('blur', () => document.documentElement.classList.add('blurred'))
+
   </script>
+  <script src="index.js" charset="utf-8"></script>
 </html>
