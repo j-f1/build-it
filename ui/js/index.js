@@ -2,18 +2,31 @@ import { remote } from 'electron'
 import ReactDOM from 'react-dom'
 import React from 'react'
 
-import { expand, shrink } from './resizer'
+import TitleBar, { TitleBarItem } from './title-bar'
+import { fa, ctxt } from './util'
 import { WebpackHandler } from './builders'
-import TitleBar from './title-bar'
-import { fa } from './util'
+import { expand, shrink } from './resizer'
 
 class App extends React.Component {
   constructor (...args) {
     super(...args)
     this.toggleWindow = this.toggleWindow.bind(this)
     this.state = {
-      expanded: false
+      expanded: false,
+      blurred: window.focusHandler.blurred
     }
+    this._focus = () => this.setState({blurred: false})
+    this._blur = () => this.setState({blurred: true})
+    window.focusHandler.on('focus', this._focus).on('blur', this._blur)
+  }
+  getChildContext () {
+    return {
+      blurred: this.state.blurred
+    }
+  }
+  componentWillUnmount () {
+    window.focusHandler.off('focus', this._focus)
+    window.focusHandler.off('blur', this._blur)
   }
   componentWillMount () {
     const webpack = new WebpackHandler({
@@ -72,12 +85,13 @@ class App extends React.Component {
             }
           }
         }}
-        rightItems={<button onClick={this.toggleWindow}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></button>}
+        rightItems={<TitleBarItem onClick={this.toggleWindow}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></TitleBarItem>}
       />
     </main>
   }
 }
-
+App.childContextTypes = ctxt('blurred')
+window._tb = TitleBar
 ReactDOM.render(
   <App />,
   document.querySelector('main')
