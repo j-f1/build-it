@@ -15,10 +15,14 @@ export default class Builder extends EventEmitter {
     if (!Array.isArray(this.opts.task)) {
       this.opts.task = [this.opts.task]
     }
-    this.task = new Observable(new Task({
+    this._task = new Task({
       label: [...this.opts.task, 'Initializing'],
       progress: 0
-    }))
+    })
+    this.task = new Observable(this._task)
+    this.on('build', () => {
+      this.task.value = this._task
+    })
     this.on('built', () => {
       const time = moment().calendar()
       setTimeout(() => {
