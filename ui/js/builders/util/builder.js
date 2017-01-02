@@ -10,13 +10,17 @@ export default class Builder extends EventEmitter {
   constructor (opts, defaults) {
     super()
     this.opts = Object.assign({
-      task: 'Building'
+      task: 'Building',
+      label: []
     }, defaults, opts)
     if (!Array.isArray(this.opts.task)) {
       this.opts.task = [this.opts.task]
     }
+    if (!Array.isArray(this.opts.label)) {
+      this.opts.label = [this.opts.label]
+    }
     this._task = new Task({
-      label: [...this.opts.task, 'Initializing'],
+      label: [...this.opts.label, ...this.opts.task, 'Initializing'],
       progress: 0
     })
     this.task = new Observable(this._task)
@@ -28,6 +32,7 @@ export default class Builder extends EventEmitter {
       setTimeout(() => {
         this.task.value = new Task({
           label: [
+            ...this.opts.label,
             <span>
               Build <strong>
                 {this.buildOK() ? 'Succeeded' : 'Failed'}

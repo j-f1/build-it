@@ -26,24 +26,30 @@ function _transform (config, { progress }) {
 export default class WebpackHandler extends Builder {
   constructor (opts) {
     super(opts, {
-      configPath: null
+      configPath: null,
+      label: 'webpack'
     })
   }
   async init () {
     const content = fs.readFileSync(this.opts.configPath, 'utf-8')
     this.config = vm.runInThisContext(content)
     this.compiler = webpack(transform(this.config, {
-      progress: (progress, message) => this.updateProgress({
-        progress,
-        message: titleCase(message)
-      })
+      progress: (progress, message) => {
+        if (!progress) this.emit('build')
+        this.updateProgress({
+          progress,
+          message: titleCase(message)
+        })
+      }
     }))
   }
   async start () {
-    this._stop = this.compiler.watch({}, (...args) => {
+    const watching = this.compiler.watch({}, (...args) => {
       this.stats = args[1]
       this.emit('built', ...args)
-    }).close
+    })
+    window._w = watching
+    this._stop = watching.close
   }
   async stop () {
     if (!this._stop) {

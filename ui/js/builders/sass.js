@@ -12,7 +12,8 @@ export default class SASSHandler extends Builder {
     super(opts, {
       from: undefined,
       to: undefined,
-      args: []
+      args: [],
+      label: 'SASS'
     })
     this._status = {
       ok: undefined,
