@@ -57,7 +57,7 @@ export default class WebpackHandler extends Builder {
     if (!this.stats) {
       return undefined
     }
-    return !!this.errors.length
+    return !this.errors.length
   }
 
   get notices () {
