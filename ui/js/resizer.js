@@ -1,5 +1,5 @@
 let EXPANDED_SIZE = {w: 700, h: 500}
-let SMALL_SIZE = {w: 400, h: 36}
+let SMALL_SIZE = {w: 500, h: 36}
 
 function expand (w) {
   const bounds = w.getBounds()
