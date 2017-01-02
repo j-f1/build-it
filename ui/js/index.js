@@ -1,12 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import TitleBar from './title-bar'
-import Task from './task'
-import WebpackHandler from './webpack'
-import moment from 'moment'
-import { fa } from './util'
 import { remote } from 'electron'
+import ReactDOM from 'react-dom'
+import moment from 'moment'
+import React from 'react'
+
 import { expand, shrink } from './resizer'
+import WebpackHandler from './webpack'
+import TitleBar from './title-bar'
+import { fa } from './util'
+import Task from './task'
 
 class App extends React.Component {
   constructor (...args) {
