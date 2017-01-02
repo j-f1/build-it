@@ -116,6 +116,7 @@ header {
     margin: 0 7px;
     flex: 1;
     max-width: calc(100vw - 100px);
+    min-width: 0;
     section {
       transform: translate3d(0, 0, 0); // stop the corner of the progress bar from breaking out when fading.
       // @media screen and (min-resolution: 2dppx) {
