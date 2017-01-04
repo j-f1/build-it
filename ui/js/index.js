@@ -1,4 +1,5 @@
 import { remote } from 'electron'
+import debounce from 'debounce'
 import ReactDOM from 'react-dom'
 import React from 'react'
 
@@ -6,6 +7,7 @@ import TitleBar, { TitleBarItem } from './title-bar'
 import { fa, ctxt } from './util'
 import { WebpackHandler } from './builders'
 import { expand, shrink } from './resizer'
+import Content from './content'
 
 class App extends React.Component {
   constructor (...args) {
@@ -38,9 +40,9 @@ class App extends React.Component {
       webpack
     })
     webpack.init().then(() => webpack.start())
-    webpack.task.on('change', (old, task) => {
+    webpack.task.on('change', debounce((old, task) => {
       this.setState({task})
-    })
+    }, 25, true))
     webpack.on('built', (err, stats) => {
       if (err) {
         console.error(err)
@@ -87,6 +89,7 @@ class App extends React.Component {
         }}
         rightItems={<TitleBarItem onClick={this.toggleWindow}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></TitleBarItem>}
       />
+      <Content />
     </main>
   }
 }
