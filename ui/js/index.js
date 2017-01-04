@@ -76,20 +76,32 @@ class App extends React.Component {
         issues={{
           warnings: {
             count: this.state.webpack.warnings.length,
-            click () {
-              console.warn('you’ve been warned!')
+            click: () => {
+              if (!this.state.expandend) {
+                this.toggleWindow()
+              }
+              ((this._content || {}).select || (x => x))('warnings')
             }
           },
           errors: {
             count: this.state.webpack.errors.length,
-            click () {
-              console.error('Oh noes!')
+            click: () => {
+              if (!this.state.expandend) {
+                this.toggleWindow()
+              }
+              ((this._content || {}).select || (x => x))('errors')
             }
           }
         }}
         rightItems={<TitleBarItem onClick={this.toggleWindow}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></TitleBarItem>}
       />
-      <Content />
+      <Content
+        warnings={this.state.webpack.warnings}
+        errors={this.state.webpack.errors}
+        ref={ref => {
+          this._content = ref
+        }}
+      />
     </main>
   }
 }
