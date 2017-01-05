@@ -18,6 +18,33 @@ export function m (...args) {
 
 export const st = reactCSS
 Object.assign(st, _reactCSSKeys)
+if (!st.handleFocus) {
+  const focus = (Component, Span = 'span') => {
+    return class Focus extends React.Component {
+      constructor (...args) {
+        super(...args)
+        this.state = { focused: false, blurred: true }
+        this.handleFocus = this.handleFocus.bind(this)
+        this.handleBlur = this.handleBlur.bind(this)
+      }
+      handleFocus () {
+        this.setState({ focused: true, blurred: false })
+      }
+      handleBlur () {
+        this.setState({ focused: false, blurred: true })
+      }
+
+      render () {
+        return (
+          <Span onFocus={this.handleFocus} onBlur={this.handleBlur}>
+            <Component {...this.props} {...this.state} />
+          </Span>
+        )
+      }
+    }
+  }
+  st.handleFocus = focus
+}
 export const vars = css
 
 export const res = {
