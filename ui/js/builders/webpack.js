@@ -34,6 +34,7 @@ export default class WebpackHandler extends Builder {
     const content = fs.readFileSync(this.opts.configPath, 'utf-8')
     this.config = vm.runInThisContext(content)
     this.compiler = webpack(transform(this.config, {
+      ...this.opts,
       progress: (progress, message) => {
         if (!progress) this.emit('build')
         this.updateProgress({
