@@ -60,10 +60,6 @@ export default class Content extends React.Component {
         color: 'red'
       }
     }]
-    const tabContents = [
-      'Warn!',
-      'ERR!'
-    ]
     return <div>
       <ul style={styles.tabBar}>
         {tabs.map((opts, i) => <Tab
@@ -74,11 +70,15 @@ export default class Content extends React.Component {
           {...st.loop(i, tabs.length)} />
         )}
       </ul>
-      {tabContents[this.state.tab]}
+      {<DetailView data={tabs[this.state.tab].items} />}
     </div>
   }
 }
 Content.contextTypes = ctxt('blurred')
+
+function DetailView ({data}) {
+  return <ul>{data.map((item, i) => <li key={i}><pre>{item.message}</pre></li>)}</ul>
+}
 
 function Tab (props, context) {
   return <li onMouseDown={props.onSelect} style={{ flex: 1 }}>
