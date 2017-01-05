@@ -1,5 +1,5 @@
 import React from 'react'
-import { st, ctxt } from '../util'
+import { st, ctxt, vars } from '../util'
 import DetailView from './detail-view'
 import Tab from './tab'
 import Settings from './settings'
@@ -52,7 +52,7 @@ export default class Content extends React.Component {
       icon: 'warning',
       items: this.props.warnings,
       iconStyle: {
-        color: 'yellow'
+        color: vars.warning
       }
     }, {
       title: 'Error',
@@ -60,7 +60,7 @@ export default class Content extends React.Component {
       icon: 'exclamation-circle',
       items: this.props.errors,
       iconStyle: {
-        color: 'red'
+        color: vars.error
       }
     }, {
       title: 'Settings',

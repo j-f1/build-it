@@ -52,7 +52,7 @@ const Issue = st.handleActive((props) => {
 
     notices: {
       icon: {
-        color: vars.accent,
+        color: vars.notice,
         fontSize: '1.5em',
         marginRight: 2,
         marginTop: 0
@@ -60,12 +60,12 @@ const Issue = st.handleActive((props) => {
     },
     warnings: {
       icon: {
-        color: '#FFC501'
+        color: vars.warning
       }
     },
     errors: {
       icon: {
-        color: '#E21414',
+        color: vars.error,
         fontSize: '1.5em',
         marginRight: 2,
         marginTop: 0
