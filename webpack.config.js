@@ -61,12 +61,12 @@ module.exports = (envArg) => {
     module: {
       rules: [
         {
-          test: /\.jsx?$/,
-          loader: 'standard-loader',
-          exclude: /node_modules/
+          test: /ui\/js\/(.*)\.jsx?$/,
+          enforce: 'pre',
+          loader: 'standard-loader'
         },
         {
-          test: /js\/(.*)\.jsx?$/,
+          test: /ui\/js\/(.*)\.jsx?$/,
           loader: 'babel-loader',
           query: {
             presets: [
