@@ -20,6 +20,7 @@
     "babel-preset-stage-1": "^6.16.0",
     "electron": "^1.4.13",
     "standard": "^8.6.0",
+    "standard-loader": "^5.0.0",
     "webpack": "^2.2.0-rc.3",
     "webpack-bundle-analyzer": "^2.2.1"
   },
