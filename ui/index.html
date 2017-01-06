@@ -8,6 +8,9 @@
   <body>
     <main></main>
   <script>
+    try {
+      require('chalk').enabled = true
+    } catch (e) {}
     {
       const EventEmitter = require('events')
       class FocusHandler extends EventEmitter {
