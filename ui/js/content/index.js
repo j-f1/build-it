@@ -23,11 +23,24 @@ export default class Content extends React.Component {
   render () {
     const styles = st({
       default: {
+        container: {
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          overflow: 'hidden'
+        },
+        detail: {
+          flex: 1,
+          overflow: 'auto',
+          margin: 0,
+          paddingTop: '1em'
+        },
         tabBar: {
           listStyleType: 'none',
           margin: 0,
           padding: 0,
           height: 24,
+          minHeight: 24,
           display: 'flex',
           justifyContent: 'space-between',
           borderBottom: '1px solid',
@@ -67,7 +80,7 @@ export default class Content extends React.Component {
       icon: 'cog',
       content: <Settings />
     }]
-    return <div>
+    return <div style={styles.container}>
       <ul style={styles.tabBar}>
         {tabs.map((opts, i) => <Tab
           key={i}
@@ -77,7 +90,7 @@ export default class Content extends React.Component {
           {...st.loop(i, tabs.length)} />
         )}
       </ul>
-      {<DetailView data={tabs[this.state.tab]} />}
+      <DetailView style={styles.detail} data={tabs[this.state.tab]} />
     </div>
   }
 }

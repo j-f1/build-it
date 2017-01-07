@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import React from 'react'
 
 import TitleBar, { TitleBarItem } from './title-bar'
-import { fa, ctxt } from './util'
+import { fa, st, ctxt } from './util'
 import { WebpackHandler } from './builders'
 import { expand, shrink } from './resizer'
 import Content from './content'
@@ -70,7 +70,16 @@ class App extends React.Component {
     }
   }
   render () {
-    return <main>
+    const styles = st({
+      default: {
+        container: {
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh'
+        }
+      }
+    }, this.state)
+    return <main style={styles.container}>
       <TitleBar
         tasks={this.state.task ? [this.state.task] : []}
         issues={{

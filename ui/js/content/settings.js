@@ -15,17 +15,20 @@ export default class Settings extends React.Component {
     const styles = st({
       default: {
         container: {
+          paddingTop: 0,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'column'
+          textAlign: 'center'
+        },
+        section: {
+          margin: 'auto'
         }
       }
     })
-    return <form style={styles.container}>
-      <h1>webpack</h1>
-      <p><label>Environment: <Input value={this.state.env} onChange={this._update('env')} /></label></p>
-    </form>
+    return <form style={Object.assign({}, this.props.style, styles.container)}><section style={styles.section}>
+      <h1 style={{marginTop: 0}}>webpack</h1>
+      <p style={{marginBottom: 0}}><label>Environment: <Input value={this.state.env} onChange={this._update('env')} /></label></p>
+    </section></form>
   }
 }
 

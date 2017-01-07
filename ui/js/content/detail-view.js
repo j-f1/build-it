@@ -4,16 +4,16 @@ import Ansi from 'ansi-to-react'
 
 const shortener = new RequestShortener(process.cwd())
 
-export default function DetailView ({ data }) {
+export default function DetailView ({ data, style }) {
   if (data.content) {
-    return data.content
+    return React.cloneElement(data.content, {style})
   }
   const items = {}
   data.items.forEach((item) => {
     const key = item.origin.readableIdentifier(shortener)
     items[key] = (items[key] || []).concat(item.message.trim())
   })
-  return <ul>
+  return <ul style={Object.assign({WebkitUserSelect: 'initial'}, style)}>
     {Object.keys(items).map((name, i) => <li key={i}>
       <strong>{name}</strong>
       {items[name].length > 1
