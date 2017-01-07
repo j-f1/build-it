@@ -32,6 +32,7 @@ const getExternals = (modules) => {
   modules.forEach(name => {
     ob[name] = `require("${name.replace('"', '\\"')}")`
   })
+  delete ob['normalize.css']
   return ob
 }
 
@@ -53,7 +54,7 @@ module.exports = (envArg) => {
 
   const conf = {
     target: 'electron',
-    entry: ['babel-polyfill', 'prefixfree', './ui/js/index.js'],
+    entry: ['babel-polyfill', 'normalize.css', 'prefixfree', './ui/js/index.js'],
     output: {
       filename: './ui/index.js'
     },
@@ -84,6 +85,10 @@ module.exports = (envArg) => {
         {
           test: /\.json$/,
           loader: 'json-loader'
+        },
+        {
+          test: /\.css$/,
+          loader: 'style-loader!css-loader'
         }
       ]
     },
