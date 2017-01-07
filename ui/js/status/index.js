@@ -1,6 +1,6 @@
 import React from 'react'
 
-import StatusDropDown from './statusDropDown'
+import StatusDropDown from './status-drop-down'
 import { TitleBarItem } from '../title-bar'
 import ProgressBar from '../progress-bar'
 import Indicator from './indicator'
