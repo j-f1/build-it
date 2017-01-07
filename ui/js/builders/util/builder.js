@@ -27,8 +27,8 @@ export default class Builder extends EventEmitter {
     this.on('build', () => {
       this.task.value = this._task
     })
-    this.on('built', () => {
-      const time = moment().calendar()
+    this.on('built', () => setTimeout(() => {
+      const time = moment()
       setTimeout(() => {
         this.task.value = new Task({
           label: [
@@ -43,7 +43,7 @@ export default class Builder extends EventEmitter {
           progress: 1
         })
       })
-    })
+    }, 100))
   }
   toString () {
     return this.constructor.name + ': ' + this.task.value.toString()

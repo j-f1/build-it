@@ -1,9 +1,24 @@
+import moment from 'moment'
 import React from 'react'
 import uuid from 'uuid'
 
 import { st, res } from '../../util'
 
 const ids = new WeakMap()
+
+function _str (value) {
+  if (React.isValidElement(value)) {
+    return value
+  } else if (typeof value === 'string') {
+    return value
+  } else if (moment.isMoment(value)) {
+    return value.calendar()
+  } else if (value instanceof Date) {
+    return moment(value).calendar()
+  } else {
+    return '{invalid object}'
+  }
+}
 
 export default class Task {
   constructor ({ label, progress, percent = 0, ...rest }) {
@@ -16,7 +31,7 @@ export default class Task {
     if (Array.isArray(this.label)) {
       const result = []
       this.label.forEach((segment, i) => {
-        result.push(<span key={i}>{segment}</span>)
+        result.push(<span key={i}>{_str(segment)}</span>)
         result.push(<VerticalBar key={'|' + i} />)
       })
       result.pop()
