@@ -27,7 +27,12 @@ export default class BuilderProxy {
       opts: this.opts,
       updateProgress: this.updateProgress.bind(this)
     })
-    _proxy(this, this._main, 'start', 'stop', 'on', /* 'emit', */ 'once', 'buildOK')
+    this._listeners = new Set()
+    _proxy(this, this._main, 'start', 'stop', /* 'emit', */ 'buildOK')
+    window.addEventListener('beforeunload', () => {
+      this._listeners.forEach((args) => this._main.off(...args))
+      this.stop().then(() => this._main.__del__())
+    })
 
     this._task = new Task({
       label: [...this.opts.label, ...this.opts.task, 'Initializing'],
@@ -71,5 +76,15 @@ export default class BuilderProxy {
   async init (...args) {
     weak(this, this._main.__del__()) // tell IPC to remove object when this one goes away.
     return await this._main.init(...args)
+  }
+
+  on (...args) {
+    this._listeners.add(args)
+    this._main.on(...args)
+    return this
+  }
+  once (...args) {
+    this._main.once(...args)
+    return this
   }
 }
