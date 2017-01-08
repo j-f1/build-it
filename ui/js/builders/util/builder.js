@@ -1,14 +1,16 @@
-import EventEmitter from 'events'
-
 import moment from 'moment'
 import React from 'react'
+import weak from 'weak'
 
 import Observable from './observable'
+import { remote } from 'electron'
 import Task from './task'
+import _proxy from './proxy'
 
-export default class Builder extends EventEmitter {
+const { makeBuilder } = remote.require('./builders')
+
+export default class BuilderProxy {
   constructor (opts, defaults) {
-    super()
     this.opts = Object.assign({
       task: 'Building',
       label: []
@@ -19,6 +21,14 @@ export default class Builder extends EventEmitter {
     if (!Array.isArray(this.opts.label)) {
       this.opts.label = [this.opts.label]
     }
+
+    this._main = makeBuilder({
+      name: this.constructor.name,
+      opts: this.opts,
+      updateProgress: this.updateProgress.bind(this)
+    })
+    _proxy(this, this._main, 'start', 'stop', 'on', /* 'emit', */ 'once', 'buildOK')
+
     this._task = new Task({
       label: [...this.opts.label, ...this.opts.task, 'Initializing'],
       progress: 0
@@ -46,7 +56,7 @@ export default class Builder extends EventEmitter {
     }, 100))
   }
   toString () {
-    return this.constructor.name + ': ' + this.task.value.toString()
+    return `${this.constructor.name}<${this.opts.realName}>: ${this.task.value.toString()}`
   }
   updateProgress ({ progress, message }) {
     const task = this.task.value
@@ -58,14 +68,8 @@ export default class Builder extends EventEmitter {
     }
     this.task.value = task
   }
-  async init () {
-    // parse config
-    throw new Error('must specify an init handler')
-  }
-  async start () {
-    throw new Error('must specify a start function')
-  }
-  async stop () {
-    throw new Error('must specify a stop function')
+  async init (...args) {
+    weak(this, this._main.__del__()) // tell IPC to remove object when this one goes away.
+    return await this._main.init(...args)
   }
 }

@@ -1,27 +1,4 @@
-import fs from 'fs'
-import vm from 'vm'
-
-import webpack, { ProgressPlugin } from 'webpack'
-import clone from 'lodash.clonedeep'
-import titleCase from 'title-case'
-import ify from 'promisify-node'
-
 import Builder from './util/builder'
-
-function transform (config, opts) {
-  if (typeof config === 'function') {
-    return transform(config(opts.env), opts)
-  }
-  if (Array.isArray(config)) {
-    return config.map(clone).map(conf => _transform(conf, opts))
-  }
-  return _transform(clone(config), opts)
-}
-function _transform (config, { progress }) {
-  if (!config.plugins) config.plugins = []
-  config.plugins.unshift(new ProgressPlugin(progress))
-  return config
-}
 
 export default class WebpackHandler extends Builder {
   constructor (opts) {
@@ -30,56 +7,13 @@ export default class WebpackHandler extends Builder {
       label: 'webpack'
     })
   }
-  async init () {
-    const content = fs.readFileSync(this.opts.configPath, 'utf-8')
-    this.config = vm.runInThisContext(content)
-    this.compiler = webpack(transform(this.config, {
-      ...this.opts,
-      progress: (progress, message) => {
-        if (!progress) this.emit('build')
-        this.updateProgress({
-          progress,
-          message: titleCase(message)
-        })
-      }
-    }))
-  }
-  async start () {
-    const watching = this.compiler.watch({}, (...args) => {
-      this.stats = args[1]
-      this.emit('built', ...args)
-    })
-    window._w = watching
-    this._stop = watching.close
-  }
-  async stop () {
-    if (!this._stop) {
-      return false
-    }
-    await ify(this._stop)()
-    this._stop = null
-    return true
-  }
-  buildOK () {
-    if (!this.stats) {
-      return undefined
-    }
-    return !this.errors.length
-  }
-
   get notices () {
-    return []
+    return this._main.notices
   }
   get warnings () {
-    if (!this.stats) {
-      return []
-    }
-    return this.stats.compilation.warnings
+    return this._main.warnings
   }
   get errors () {
-    if (!this.stats) {
-      return []
-    }
-    return this.stats.compilation.errors
+    return this._main.errors
   }
 }
