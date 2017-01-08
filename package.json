@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "ansi-to-react": "0.0.5",
+    "ansi-to-react-with-classes": "0.0.6",
     "css-classname": "^1.1.3",
     "debounce": "^1.0.0",
     "devtron": "^1.4.0",
@@ -41,6 +42,7 @@
     "prefixfree": "^1.0.0",
     "promisify-node": "^0.4.0",
     "react": "^15.4.1",
+    "react-ansi-style": "^1.0.0",
     "react-dom": "^15.4.1",
     "react-tabs": "^0.8.2",
     "react-transition-group": "^1.0.0",

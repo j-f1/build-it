@@ -1,14 +1,16 @@
 import React from 'react'
-import Ansi from 'ansi-to-react'
+import ansiStyle from 'react-ansi-style'
+import 'react-ansi-style/inject-css'
 
 function Text ({ children, highlight = true }) {
-  let Highlight
+  let content
   if (highlight instanceof String || typeof highlight === 'function') {
-    Highlight = highlight
+    const Highlight = highlight
+    content = <Highlight>{children}</Highlight>
   } else if (highlight) {
-    Highlight = Ansi
+    content = <code>{ansiStyle(React, children)}</code>
   } else {
-    Highlight = 'code'
+    content = <code>{children}</code>
   }
   return <pre style={{
     fontSize: '0.8em',
@@ -17,9 +19,10 @@ function Text ({ children, highlight = true }) {
     borderRadius: '0.25em',
     color: 'white',
     border: '1px solid #333',
+    overflow: 'auto',
     margin: '1em',
     marginLeft: 0
-  }}><Highlight>{children}</Highlight></pre>
+  }}>{content}</pre>
 }
 
 export default function DetailView ({ data, style }) {

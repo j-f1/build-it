@@ -12,3 +12,10 @@ body {
 button:focus {
   outline: none;
 }
+
+pre code .react-ansi-style-green {
+  color: limegreen;
+}
+pre code .react-ansi-style-bgRed {
+  background-color: firebrick;
+}
