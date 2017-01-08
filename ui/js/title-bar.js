@@ -21,6 +21,10 @@ function _TitleBarItem (props, context) {
         margin: '0 7px',
         appearance: 'none',
         padding: '3px 10px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
 
         background: 'linear-gradient(hsl(0, 0%, 99%), hsl(0, 0%, 94%))',
         boxShadow: 'hsla(0, 0%, 0%, 0.3) 0 1px 1px -1px',
@@ -80,12 +84,12 @@ export default function TitleBar (props, context) {
       titleBar: {
         paddingLeft: 71,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'center',
 
         height: 37,
-        paddingTop: 3,
-        paddingBottom: 3,
+        paddingTop: 7,
+        paddingBottom: 7,
         whiteSpace: 'nowrap',
 
         outline: 'none',
