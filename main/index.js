@@ -34,6 +34,7 @@ app.on('ready', () => {
   Promise.all([REACT_DEVELOPER_TOOLS, REACT_PERF].map(installExtension))
       .then((names) => names.map(name => console.log(`Added Extension:  ${name}`)))
       .catch((err) => console.error('An error occurred: ', err))
+  require('devtron').install()
   createWindow()
 })
 
