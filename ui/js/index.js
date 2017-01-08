@@ -103,7 +103,7 @@ class App extends React.Component {
             }
           }
         }}
-        rightItems={<TitleBarItem onClick={this.toggleWindow}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></TitleBarItem>}
+        rightItems={<TitleBarItem onClick={this.toggleWindow} title={`${this.state.expanded ? 'Shrink' : 'Expand'} Window`}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></TitleBarItem>}
       />
       <Content
         warnings={this.state.webpack.warnings}
