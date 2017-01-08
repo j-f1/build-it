@@ -1,10 +1,15 @@
 import React from 'react'
-import RequestShortener from 'webpack/lib/RequestShortener.js'
 import Ansi from 'ansi-to-react'
 
-const shortener = new RequestShortener(process.cwd())
-
-function Text ({ children }) {
+function Text ({ children, highlight = true }) {
+  let Highlight
+  if (highlight instanceof String || typeof highlight === 'function') {
+    Highlight = highlight
+  } else if (highlight) {
+    Highlight = Ansi
+  } else {
+    Highlight = 'code'
+  }
   return <pre style={{
     fontSize: '0.8em',
     background: 'black',
@@ -14,7 +19,7 @@ function Text ({ children }) {
     border: '1px solid #333',
     margin: '1em',
     marginLeft: 0
-  }}><Ansi>{children}</Ansi></pre>
+  }}><Highlight>{children}</Highlight></pre>
 }
 
 export default function DetailView ({ data, style }) {
@@ -23,7 +28,7 @@ export default function DetailView ({ data, style }) {
   }
   const items = {}
   data.items.forEach((item) => {
-    const key = item.origin.readableIdentifier(shortener)
+    const key = item.loc
     items[key] = (items[key] || []).concat(item.message.trim())
   })
   return <ul style={Object.assign({WebkitUserSelect: 'initial'}, style)}>

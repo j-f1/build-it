@@ -2,11 +2,22 @@ const path = require('path')
 
 const webpack = require('webpack')
 const { ProgressPlugin } = webpack
+const RequestShortener = require('webpack/lib/RequestShortener.js')
 const clone = require('lodash.clonedeep')
 const titleCase = require('title-case')
 const ify = require('promisify-node')
 
 const Builder = require('../util/builder')
+
+const shortener = new RequestShortener(process.cwd())
+function _simplify (items) {
+  return items.map(item => {
+    return {
+      loc: item.origin.readableIdentifier(shortener),
+      message: item.message.trim()
+    }
+  })
+}
 
 function transform (config, opts) {
   if (typeof config === 'function') {
@@ -50,7 +61,7 @@ exports = module.exports = class WebpackHandler extends Builder {
     return new Promise((resolve, reject) => {
       const watching = this.compiler.watch({}, (...args) => {
         this.stats = args[1]
-        this.emit('built', ...args)
+        this.emit('built')
       })
       this._stop = watching.close
       resolve()
@@ -81,12 +92,12 @@ exports = module.exports = class WebpackHandler extends Builder {
     if (!this.stats) {
       return []
     }
-    return this.stats.compilation.warnings
+    return _simplify(this.stats.compilation.warnings)
   }
   get errors () {
     if (!this.stats) {
       return []
     }
-    return this.stats.compilation.errors
+    return _simplify(this.stats.compilation.errors)
   }
 }
