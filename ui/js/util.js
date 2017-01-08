@@ -55,6 +55,9 @@ const contextTypes = {}
 registerCtxt('blurred', {
   blurred: React.PropTypes.bool
 })
+registerCtxt('mini', {
+  mini: React.PropTypes.bool
+})
 
 export function registerCtxt (type, value) {
   if (contextTypes[type]) {

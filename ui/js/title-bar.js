@@ -95,7 +95,8 @@ export default function TitleBar (props, context) {
         outline: 'none',
 
         boxShadow: 'inset hsla(0, 0%, 100%, 0.5) 0 1px 1px',
-        borderBottom: '1px solid',
+        borderBottomStyle: 'solid',
+        borderBottomWidth: 1,
         borderBottomColor: 'hsl(0, 0%, 74%)',
         background: 'linear-gradient(to bottom, hsl(0, 0%, 92%), hsl(0, 0%, 87%))',
 
@@ -110,6 +111,12 @@ export default function TitleBar (props, context) {
         borderBottomColor: '#DBDBDB',
         color: '#ACACAC'
       }
+    },
+    mini: {
+      titleBar: {
+        borderBottomWidth: 0,
+        height: 36
+      }
     }
   }, props, context, res)
   return <header style={styles.titleBar}>
@@ -118,4 +125,4 @@ export default function TitleBar (props, context) {
     {props.rightItems}
   </header>
 }
-TitleBar.contextTypes = ctxt('blurred')
+TitleBar.contextTypes = ctxt('blurred', 'mini')

@@ -23,7 +23,8 @@ class App extends React.Component {
   }
   getChildContext () {
     return {
-      blurred: this.state.blurred
+      blurred: this.state.blurred,
+      mini: !this.state.expanded
     }
   }
   componentWillUnmount () {
@@ -114,7 +115,7 @@ class App extends React.Component {
     </main>
   }
 }
-App.childContextTypes = ctxt('blurred')
+App.childContextTypes = ctxt('blurred', 'mini')
 window._tb = TitleBar
 ReactDOM.render(
   <App />,
