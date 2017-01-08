@@ -5,7 +5,7 @@ import React from 'react'
 import css from './css'
 
 export const cx = (...args) => {
-  // console.error('Don’t use cx. Use `reactCSS`/`st` instead.')
+  console.error('Don’t use `cx`. Use `reactCSS`/`st` instead.')
   return classJoin(...args)
 }
 export function fa (icon, ...args) {
