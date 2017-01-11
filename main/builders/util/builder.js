@@ -3,9 +3,9 @@ const EventEmitter = require('events')
 const _keeper = new Set()
 
 exports = module.exports = class Builder extends EventEmitter {
-  constructor (opts) {
+  constructor (opts, defaults) {
     super()
-    this.opts = opts
+    this.opts = Object.assign({}, defaults, opts)
     _keeper.add(this)
   }
   toString () {
