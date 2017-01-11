@@ -87,7 +87,7 @@ class App extends React.Component {
           warnings: {
             count: this.state.webpack.warnings.length,
             click: () => {
-              if (!this.state.expandend) {
+              if (!this.state.expanded) {
                 this.toggleWindow()
               }
               ((this._content || {}).select || (x => x))('warnings')
@@ -96,7 +96,7 @@ class App extends React.Component {
           errors: {
             count: this.state.webpack.errors.length,
             click: () => {
-              if (!this.state.expandend) {
+              if (!this.state.expanded) {
                 this.toggleWindow()
               }
               ((this._content || {}).select || (x => x))('errors')
