@@ -28,10 +28,12 @@ export default class BuilderProxy {
       updateProgress: this.updateProgress.bind(this)
     })
     this._listeners = new Set()
-    _proxy(this, this._main, 'start', 'stop', /* 'emit', */ 'buildOK')
+    _proxy(this, this._main, 'start', 'stop', 'removeListener', /* 'emit', */ 'buildOK')
     window.addEventListener('beforeunload', () => {
-      this._listeners.forEach((args) => this._main.off(...args))
-      this.stop().then(() => this._main.__del__())
+      this.stop().then(() => {
+        this._main.__del__()
+        this._main = null
+      })
     })
 
     this._task = new Task({

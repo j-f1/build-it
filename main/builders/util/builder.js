@@ -12,6 +12,7 @@ exports = module.exports = class Builder extends EventEmitter {
     return this.constructor.name + ': ' + this.task.value.toString()
   }
   __del__ () {
+    this.removeAllListeners()
     _keeper.delete(this)
   }
   init () {
