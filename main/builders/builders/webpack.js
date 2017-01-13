@@ -1,4 +1,5 @@
 const path = require('path')
+const os = require('os')
 
 const webpack = require('webpack')
 const { ProgressPlugin } = webpack
@@ -6,6 +7,8 @@ const RequestShortener = require('webpack/lib/RequestShortener.js')
 const clone = require('lodash.clonedeep')
 const titleCase = require('title-case')
 const ify = require('promisify-node')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const uuid = require('uuid')
 
 const Builder = require('../util/builder')
 
@@ -28,9 +31,15 @@ function transform (config, opts) {
   }
   return _transform(clone(config), opts)
 }
-function _transform (config, { progress }) {
+function _transform (config, { progress, visualizerOutput }) {
   if (!config.plugins) config.plugins = []
   config.plugins.unshift(new ProgressPlugin(progress))
+  config.plugins.unshift(new BundleAnalyzerPlugin({
+    reportFilename: path.join(...('..!'.repeat(100).split('!')), visualizerOutput),
+    openAnalyzer: false,
+    logLevel: 'warn',
+    analyzerMode: 'static'
+  }))
   return config
 }
 
@@ -38,7 +47,8 @@ exports = module.exports = class WebpackHandler extends Builder {
   constructor (opts) {
     super(opts, {
       configPath: null,
-      label: 'webpack'
+      label: 'webpack',
+      visualizerOutput: path.join(os.tmpdir(), uuid(), 'stats.html')
     })
   }
   init () {

@@ -108,6 +108,7 @@ class App extends React.Component {
       <Content
         warnings={this.state.webpack.warnings}
         errors={this.state.webpack.errors}
+        analyzer={this.state.webpack._main.opts.visualizerOutput}
         ref={ref => {
           this._content = ref
         }}

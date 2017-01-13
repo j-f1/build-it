@@ -79,6 +79,12 @@ export default class Content extends React.Component {
       title: 'Settings',
       icon: 'cog',
       content: <Settings />
+    }, {
+      title: 'Bundle Analysis',
+      icon: 'info',
+      content: <webview src={this.props.analyzer} style={{
+        paddingTop: 0
+      }} />
     }]
     return <div style={styles.container}>
       <ul style={styles.tabBar}>

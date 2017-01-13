@@ -26,8 +26,14 @@ function Text ({ children, highlight = true }) {
 }
 
 export default function DetailView ({ data, style }) {
-  if (data.content) {
-    return React.cloneElement(data.content, {style})
+  if (React.isValidElement(data.content)) {
+    const st = Object.assign({}, style, data.content.props.style)
+    return React.cloneElement(data.content, {
+      style: st
+    })
+  } else if (typeof data.content === 'function' || typeof data.content === 'string') {
+    const Content = data.content
+    return <Content style={style} />
   }
   const items = {}
   data.items.forEach((item) => {
