@@ -19,13 +19,11 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-1": "^6.16.0",
     "css-loader": "^0.26.1",
-    "electron": "^1.4.13",
-    "electron-rebuild": "^1.5.5",
+    "electron": "^1.4.14",
+    "electron-rebuild": "^1.5.6",
     "standard": "^8.6.0",
     "standard-loader": "^5.0.0",
-    "style-loader": "^0.13.1",
-    "webpack": "^2.2.0-rc.3",
-    "webpack-bundle-analyzer": "^2.2.1"
+    "style-loader": "^0.13.1"
   },
   "dependencies": {
     "ansi-to-react": "0.0.5",
@@ -41,16 +39,16 @@
     "observable": "^2.1.4",
     "prefixfree": "^1.0.0",
     "promisify-node": "^0.4.0",
-    "react": "^15.4.1",
+    "react": "^15.4.2",
     "react-ansi-style": "^1.0.0",
-    "react-dom": "^15.4.1",
+    "react-dom": "^15.4.2",
     "react-tabs": "^0.8.2",
     "react-transition-group": "^1.0.0",
     "reactcss": "^1.1.1",
     "title-case": "^2.1.0",
     "uuid": "^3.0.1",
     "weak": "^1.0.1",
-    "webpack": "^2.2.0-rc.3",
+    "webpack": "^2.2.0-rc.4",
     "webpack-bundle-analyzer": "^2.2.1"
   }
 }
