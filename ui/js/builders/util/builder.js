@@ -73,7 +73,7 @@ export default class BuilderProxy {
       task.progress = progress
     }
     if (message) {
-      task.label = task.label.slice(0, -1).concat(message)
+      task.label = this._task.label.slice(0, -1).concat(message)
     }
     this.task.value = task
   }
