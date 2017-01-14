@@ -1,19 +1,27 @@
+// core
 const path = require('path')
 const os = require('os')
 
-const webpack = require('webpack')
-const { ProgressPlugin } = webpack
+// webpack
 const RequestShortener = require('webpack/lib/RequestShortener.js')
+const webpack = require('webpack')
+
+// webpack plugins
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const DashboardPlugin = require('webpack-dashboard/plugin')
+
+// npm
 const clone = require('lodash.clonedeep')
 const titleCase = require('title-case')
 const ify = require('promisify-node')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const getPort = require('get-port')
 const uuid = require('uuid')
 
+// local
 const Builder = require('../util/builder')
 
 const shortener = new RequestShortener(process.cwd())
-function _simplify (items) {
+function simplify (items) {
   return items.map(item => {
     return {
       loc: item.origin.readableIdentifier(shortener),
@@ -31,9 +39,12 @@ function transform (config, opts) {
   }
   return _transform(clone(config), opts)
 }
-function _transform (config, { progress, visualizerOutput }) {
+function _transform (config, { progress, port, visualizerOutput }) {
   if (!config.plugins) config.plugins = []
-  config.plugins.unshift(new ProgressPlugin(progress))
+  config.plugins.unshift(new DashboardPlugin({
+    port,
+    handler: progress
+  }))
   config.plugins.unshift(new BundleAnalyzerPlugin({
     reportFilename: path.join(...('..!'.repeat(100).split('!')), visualizerOutput),
     openAnalyzer: false,
@@ -43,28 +54,44 @@ function _transform (config, { progress, visualizerOutput }) {
   return config
 }
 
+const DEFAULT_PORT = Symbol('default port')
+
 exports = module.exports = class WebpackHandler extends Builder {
   constructor (opts) {
     super(opts, {
+      port: DEFAULT_PORT,
       configPath: null,
       label: 'webpack',
       visualizerOutput: path.join(os.tmpdir(), uuid(), 'stats.html')
     })
   }
   init () {
-    return new Promise((resolve, reject) => {
-      // const content = fs.readFileSync(this.opts.configPath, 'utf-8')
+    let p
+    if (this.opts.port === DEFAULT_PORT) {
+      p = getPort()
+    } else {
+      p = Promise.resolve(this.opts.port)
+    }
+    return p.then(port => {
       this.config = require(path.resolve(this.opts.configPath))
       this.compiler = webpack(transform(this.config, Object.assign({}, this.opts, {
-        progress: (progress, message) => {
-          if (!progress) this.emit('build')
-          this.updateProgress({
-            progress,
-            message: titleCase(message)
-          })
+        progress: (args) => {
+          const ob = {}
+          for (const { type, value } of args) {
+            ob[type] = value !== undefined ? value : true
+          }
+          if (ob.stats) {
+            this.setStats(ob.stats.data)
+          }
+          this._updateProgress(ob)
         }
       })))
-      resolve()
+    })
+  }
+  _updateProgress ({ status, progress, operations }) {
+    this.updateProgress({
+      progress,
+      message: [status, titleCase(operations)]
     })
   }
   start () {
@@ -102,12 +129,12 @@ exports = module.exports = class WebpackHandler extends Builder {
     if (!this.stats) {
       return []
     }
-    return _simplify(this.stats.compilation.warnings)
+    return simplify(this.stats.compilation.warnings)
   }
   get errors () {
     if (!this.stats) {
       return []
     }
-    return _simplify(this.stats.compilation.errors)
+    return simplify(this.stats.compilation.errors)
   }
 }

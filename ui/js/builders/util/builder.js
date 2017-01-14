@@ -25,7 +25,8 @@ export default class BuilderProxy {
     this._main = makeBuilder({
       name: this.constructor.name,
       opts: this.opts,
-      updateProgress: this.updateProgress.bind(this)
+      updateProgress: this.updateProgress.bind(this),
+      setStats: this.setStats.bind(this)
     })
     this._listeners = new Set()
     _proxy(this, this._main, 'start', 'stop', 'removeListener', /* 'emit', */ 'buildOK')
@@ -76,6 +77,9 @@ export default class BuilderProxy {
       task.label = this._task.label.slice(0, -1).concat(message)
     }
     this.task.value = task
+  }
+  setStats (stats) {
+    this.stats = stats
   }
   async init (...args) {
     weak(this, this._main.__del__()) // tell IPC to remove object when this one goes away.

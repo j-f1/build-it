@@ -46,12 +46,12 @@ class App extends React.Component {
     webpack.task.on('change', debounceRAF((old, task) => {
       this.setState({task})
     }))
-    webpack.on('built', (err, stats) => {
+    webpack.on('built', err => {
       if (err) {
         console.error(err)
         return
       }
-      this.setState({ stats, webpack: this.state.webpack })
+      this.setState({ webpack: this.state.webpack })
       webpack.task.once('change', (old, task) => {
         setTimeout(() => this.setState({
           task: null
