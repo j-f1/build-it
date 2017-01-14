@@ -7,6 +7,7 @@ import Settings from './settings'
 export default class Content extends React.Component {
   constructor (...args) {
     super(...args)
+    this._webviewRef = this._webviewRef.bind(this)
     this._select = this._select.bind(this)
     this.select = this.select.bind(this)
     this.state = {
@@ -19,6 +20,9 @@ export default class Content extends React.Component {
   }
   _select (tab) {
     this.setState({ tab })
+  }
+  _webviewRef (ref) {
+    this.webview = ref
   }
   render () {
     const styles = st({
@@ -82,7 +86,7 @@ export default class Content extends React.Component {
     }, {
       title: 'Bundle Analysis',
       icon: 'info',
-      content: <webview src={this.props.analyzer} style={{
+      content: <webview ref={this._webviewRef} src={this.props.analyzer} style={{
         paddingTop: 0
       }} />
     }]

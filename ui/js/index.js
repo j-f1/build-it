@@ -1,10 +1,9 @@
 import { remote } from 'electron'
-import debounce from 'debounce'
 import ReactDOM from 'react-dom'
 import React from 'react'
 
 import TitleBar, { TitleBarItem } from './title-bar'
-import { fa, st, ctxt } from './util'
+import { fa, st, ctxt, debounceRAF } from './util'
 import { WebpackHandler } from './builders'
 import { expand, shrink } from './resizer'
 import Content from './content'
@@ -40,20 +39,23 @@ class App extends React.Component {
     this.setState({
       webpack
     })
+  }
+  componentDidMount () {
+    const webpack = this.state.webpack
     webpack.init().then(() => webpack.start())
-    webpack.task.on('change', debounce((old, task) => {
+    webpack.task.on('change', debounceRAF((old, task) => {
       this.setState({task})
-    }, 25, true))
+    }))
     webpack.on('built', (err, stats) => {
       if (err) {
         console.error(err)
         return
       }
       this.setState({ stats, webpack: this.state.webpack })
-      webpack.task.once('change', () => {
-        process.nextTick(() => this.setState({
+      webpack.task.once('change', (old, task) => {
+        setTimeout(() => this.setState({
           task: null
-        }))
+        }), 100)
       })
     })
   }

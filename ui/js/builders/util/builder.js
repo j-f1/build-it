@@ -41,26 +41,28 @@ export default class BuilderProxy {
       progress: 0
     })
     this.task = new Observable(this._task)
-    this.on('build', () => {
-      this.task.value = this._task
-    })
-    this.on('built', () => setTimeout(() => {
-      const time = moment()
-      setTimeout(() => {
-        this.task.value = new Task({
-          label: [
-            ...this.opts.label,
-            <span>
-              Build <strong>
-                {this.buildOK() ? 'Succeeded' : 'Failed'}
-              </strong>
-            </span>,
-            time
-          ],
-          progress: 1
+    process.nextTick(() => {
+      this.on('build', () => {
+        this.task.value = this._task
+      })
+      this.on('built', () => {
+        const time = moment()
+        process.nextTick(() => {
+          this.task.value = new Task({
+            label: [
+              ...this.opts.label,
+              <span>
+                Build <strong>
+                  {this.buildOK() ? 'Succeeded' : 'Failed'}
+                </strong>
+              </span>,
+              time
+            ],
+            progress: 1
+          })
         })
       })
-    }, 100))
+    })
   }
   toString () {
     return `${this.constructor.name}<${this.opts.realName}>: ${this.task.value.toString()}`

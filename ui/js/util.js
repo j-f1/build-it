@@ -69,3 +69,21 @@ export function registerCtxt (type, value) {
 export function ctxt (...types) {
   return Object.assign({}, ...types.map(type => contextTypes[type]))
 }
+
+export function debounceRAF (f) {
+  let latestArgs = []
+  let self = this
+  let requested = false
+  return function (...args) {
+    latestArgs = args
+    self = this
+
+    if (!requested) {
+      window.requestAnimationFrame(() => {
+        requested = false
+        f.apply(self, latestArgs)
+      })
+      requested = true
+    }
+  }
+}

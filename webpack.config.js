@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const DashboardPlugin = require('webpack-dashboard/plugin')
 
 const uglify = new webpack.optimize.UglifyJsPlugin({
   sourceMap: true,
@@ -24,7 +25,8 @@ const devPlugins = [
   new webpack.LoaderOptionsPlugin({
     minimize: false,
     debug: true
-  })
+  }),
+  new DashboardPlugin()
 ]
 
 const getExternals = (modules) => {
@@ -71,10 +73,11 @@ module.exports = (envArg) => {
           loader: 'babel-loader',
           query: {
             presets: [
-              ['latest', {
-                'es2015': {
-                  'modules': false
-                }
+              ['env', {
+                targets: {
+                  electron: /^.+(\d+\.\d+)\..*$/.exec(pkg.devDependencies.electron)[1]
+                },
+                modules: false
               }],
               'react',
               'stage-1'
