@@ -18,17 +18,31 @@ class App extends React.Component {
     }
     this._focus = () => this.setState({blurred: false})
     this._blur = () => this.setState({blurred: true})
+
+    this._updateTask = debounceRAF((old, task) => {
+      this.setState({task})
+    })
+    this._built = this._built.bind(this)
+
     window.focusHandler.on('focus', this._focus).on('blur', this._blur)
+  }
+  _built (err) {
+    if (err) {
+      console.error(err)
+      return
+    }
+    this.setState({ webpack: this.state.webpack })
+    this.state.webpack.task.once('change', (old, task) => {
+      setTimeout(() => this.setState({
+        task: null
+      }), 100)
+    })
   }
   getChildContext () {
     return {
       blurred: this.state.blurred,
       mini: !this.state.expanded
     }
-  }
-  componentWillUnmount () {
-    window.focusHandler.off('focus', this._focus)
-    window.focusHandler.off('blur', this._blur)
   }
   componentWillMount () {
     const webpack = new WebpackHandler({
@@ -43,21 +57,14 @@ class App extends React.Component {
   componentDidMount () {
     const webpack = this.state.webpack
     webpack.init().then(() => webpack.start())
-    webpack.task.on('change', debounceRAF((old, task) => {
-      this.setState({task})
-    }))
-    webpack.on('built', err => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      this.setState({ webpack: this.state.webpack })
-      webpack.task.once('change', (old, task) => {
-        setTimeout(() => this.setState({
-          task: null
-        }), 100)
-      })
-    })
+    webpack.task.on('change', this._updateTask)
+    webpack.on('built', this._built)
+  }
+  componentWillUnmount () {
+    window.focusHandler.removeListener('focus', this._focus)
+    window.focusHandler.removeListener('blur', this._blur)
+    this.state.webpack.task.removeListener('change', this._updateTask)
+    this.state.webpack.removeListener('built', this._built)
   }
   toggleWindow () {
     this.setState(({ expanded }) => ({
@@ -111,6 +118,8 @@ class App extends React.Component {
         warnings={this.state.webpack.warnings}
         errors={this.state.webpack.errors}
         analyzer={this.state.webpack._main.opts.visualizerOutput}
+        stats={this.state.webpack.stats}
+        status={this.state.webpack}
         ref={ref => {
           this._content = ref
         }}

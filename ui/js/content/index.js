@@ -3,15 +3,18 @@ import { st, ctxt, vars } from '../util'
 import DetailView from './detail-view'
 import Tab from './tab'
 import Settings from './settings'
+import Info from './info'
 
 export default class Content extends React.Component {
   constructor (...args) {
     super(...args)
     this._webviewRef = this._webviewRef.bind(this)
+    this._reloadWebview = this._reloadWebview.bind(this)
+
     this._select = this._select.bind(this)
     this.select = this.select.bind(this)
     this.state = {
-      tab: 0
+      tab: 2
     }
     this._tabNames = ['warnings', 'errors']
   }
@@ -20,6 +23,15 @@ export default class Content extends React.Component {
   }
   _select (tab) {
     this.setState({ tab })
+  }
+  _reloadWebview () {
+    this.webview && this.webview.reload()
+  }
+  componentDidMount () {
+    this.props.status.on('built', this._reloadWebview)
+  }
+  componentWillUnmount () {
+    this.props.status.removeListener('built', this._reloadWebview)
   }
   _webviewRef (ref) {
     this.webview = ref
@@ -80,12 +92,15 @@ export default class Content extends React.Component {
         color: vars.error
       }
     }, {
+      title: 'Info',
+      icon: 'info-circle',
+      content: <Info stats={this.props.stats} />
+    }, {
       title: 'Settings',
       icon: 'cog',
       content: <Settings />
     }, {
       title: 'Bundle Analysis',
-      icon: 'info',
       content: <webview ref={this._webviewRef} src={this.props.analyzer} style={{
         paddingTop: 0
       }} />
