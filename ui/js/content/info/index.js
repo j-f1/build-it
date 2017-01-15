@@ -28,7 +28,7 @@ export default function Info (props) {
       <small>Info will appear when finished</small>
     </article>
   }
-  return <article style={Object.assign({}, props.style, styles.container)}>
+  return <article style={Object.assign({}, props.style, styles.container, props.hidden && { display: 'none' })}>
     <div style={{
       overflow: 'auto',
       padding: '0 1em'

@@ -129,7 +129,7 @@ export default class Content extends React.Component {
           {...st.loop(i, this.tabs.length)} />
         )}
       </ul>
-      <DetailView style={styles.detail} data={this.tabs[this.state.tab]} />
+      {this.tabs.map((data, i) => <DetailView key={i} style={styles.detail} data={data} hidden={i !== this.state.tab} />)}
     </div>
   }
 }
