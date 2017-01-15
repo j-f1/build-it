@@ -27,14 +27,16 @@ export default class Settings extends React.Component {
     })
     return <form style={Object.assign({}, this.props.style, styles.container, this.props.hidden && { display: 'none' })}><section style={styles.section}>
       <h1 style={{marginTop: 0}}>webpack</h1>
-      <p style={{marginBottom: 0}}><label>Environment: <Input value={this.state.env} onChange={this._update('env')} /></label></p>
+      <p style={{marginBottom: 0}}><label>Environment: <Input el='textarea' value={this.state.env} onChange={this._update('env')} style={{
+        fontFamily: 'Fira Code'
+      }} /></label></p>
     </section></form>
   }
 }
 
 const Input = st.handleFocus(_Input)
 function _Input (props) {
-  const { style, inputStyle, focused, blurred, ...rest } = props
+  const { el: Element = 'input', style, containerStyle, focused, blurred, ...rest } = props
   const styles = st({
     default: {
       container: {
@@ -59,5 +61,5 @@ function _Input (props) {
       }
     }
   }, { focused, blurred })
-  return <span style={Object.assign({}, styles.container, style)}><input {...rest} style={Object.assign({}, styles.input, inputStyle)} /></span>
+  return <span style={Object.assign({}, styles.container, containerStyle)}><Element {...rest} style={Object.assign({}, styles.input, style)} /></span>
 }
