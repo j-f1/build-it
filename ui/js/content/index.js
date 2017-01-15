@@ -70,7 +70,7 @@ export default class Content extends React.Component {
       }))
     })
     this.shortcuts.bind('ctrl+shift+tab', () => this.setState(({ tab }) => ({
-      tab: (tab - 1) % this.tabs.length
+      tab: tab > 0 ? tab - 1 : this.tabs.length - 1
     })))
   }
   componentWillUnmount () {
