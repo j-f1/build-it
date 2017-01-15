@@ -96,14 +96,15 @@ export default class Content extends React.Component {
       icon: 'info-circle',
       content: <Info stats={this.props.stats} />
     }, {
-      title: 'Settings',
-      icon: 'cog',
-      content: <Settings />
-    }, {
       title: 'Bundle Analysis',
       content: <webview ref={this._webviewRef} src={this.props.analyzer} style={{
         paddingTop: 0
       }} />
+    }, {
+      title: 'Settings',
+      icon: 'cog',
+      pinned: true,
+      content: <Settings />
     }]
     return <div style={styles.container}>
       <ul style={styles.tabBar}>

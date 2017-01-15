@@ -2,7 +2,7 @@ import React from 'react'
 import { fa, st, ctxt } from '../util'
 
 export default function Tab (props, context) {
-  return <li onMouseDown={props.onSelect} style={{ flex: 1 }}>
+  return <li onMouseDown={props.onSelect} style={props.pinned ? {} : { flex: 1 }}>
     <TabContent {...props} />
   </li>
 }
@@ -74,13 +74,18 @@ function _TabContent (props, context) {
         borderTopColor: 'hsl(0, 0%, 59%)',
         borderLeftColor: 'hsl(0, 0%, 59%)'
       }
+    },
+    pinned: {
+      tab: {
+        width: 24
+      }
     }
   }, props, context)
   return <div style={props.selected
     ? Object.assign({}, styles.tab, styles.activeTab)
     : styles.tab}>
     <i className={fa(props.icon)} style={(props.items || []).length ? props.iconStyle : {}} />
-    {`\u{200B} ${props.items ? props.items.length : ''} ${props.title}${(!props.items || props.items.length === 1) ? '' : props.plural}`}
+    {props.pinned || `\u{200B} ${props.items ? props.items.length : ''} ${props.title}${(!props.items || props.items.length === 1) ? '' : props.plural}`}
   </div>
 }
 _TabContent.contextTypes = ctxt('blurred')
