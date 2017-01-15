@@ -59,6 +59,7 @@ export default class Content extends React.Component {
     this.setState({ tab })
   }
   _reloadWebview () {
+    // XXX: not working!
     this.webview && this.webview.reload()
   }
   componentDidMount () {
