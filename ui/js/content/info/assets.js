@@ -34,5 +34,5 @@ export default ({ stats }) => <div>
       <Asset asset={asset} />
     </li>)}
   </ul>
-  <span><em>Total</em>: {size(stats.assets.map(asset => asset.size).reduce((x, y) => x + y))}</span>
+  <span>Total: {size(stats.assets.map(asset => asset.size).reduce((x, y) => x + y))}</span>
 </div>
