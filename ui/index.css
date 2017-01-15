@@ -9,7 +9,7 @@ body {
   user-select: none;
   overflow: hidden;
 }
-button:focus {
+*:focus {
   outline: none;
 }
 
