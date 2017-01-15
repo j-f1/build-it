@@ -77,7 +77,7 @@ function _TabContent (props, context) {
     },
     pinned: {
       tab: {
-        width: 24
+        width: 28
       }
     }
   }, props, context)
