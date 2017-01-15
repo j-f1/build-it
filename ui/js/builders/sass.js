@@ -7,7 +7,7 @@ export default class SASSHandler extends Builder {
       to: undefined,
       args: [],
       label: 'SASS'
-    })
+    }, 'SASSHandler')
     this._status = {
       ok: undefined,
       warnings: [],

@@ -5,7 +5,7 @@ export default class WebpackHandler extends Builder {
     super(opts, {
       configPath: null,
       label: 'webpack'
-    })
+    }, 'WebpackHandler')
   }
   get notices () {
     return this._main.notices

@@ -10,7 +10,7 @@ import _proxy from './proxy'
 const { makeBuilder } = remote.require('./builders')
 
 export default class BuilderProxy {
-  constructor (opts, defaults) {
+  constructor (opts, defaults, className) {
     this.opts = Object.assign({
       task: 'Building',
       label: []
@@ -23,7 +23,7 @@ export default class BuilderProxy {
     }
 
     this._main = makeBuilder({
-      name: this.constructor.name,
+      name: className,
       opts: this.opts,
       updateProgress: this.updateProgress.bind(this),
       setStats: this.setStats.bind(this)

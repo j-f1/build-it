@@ -1,25 +1,16 @@
 const webpack = require('webpack')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const DashboardPlugin = require('webpack-dashboard/plugin')
+const BabiliPlugin = require('babili-webpack-plugin')
 
-const uglify = new webpack.optimize.UglifyJsPlugin({
-  sourceMap: true,
-  compress: {
-    collapse_vars: true,
-    pure_getters: true, // getters don’t have side effects.
-    reduce_vars: true,
-    unsafe: true,
-
-    warnings: false
-  }
-})
+const minify = new BabiliPlugin()
 
 const prodPlugins = [
   new webpack.LoaderOptionsPlugin({
     minimize: true,
     debug: false
   }),
-  uglify
+  minify
 ]
 const devPlugins = [
   new webpack.LoaderOptionsPlugin({
