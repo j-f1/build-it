@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { st, ctxt, vars } from '../util'
+
 import DetailView from './detail-view'
 import Tab from './tab'
 import Settings from './settings'

@@ -1,4 +1,7 @@
+import querystring from 'querystring'
 import { remote } from 'electron'
+import path from 'path'
+
 import ReactDOM from 'react-dom'
 import React from 'react'
 
@@ -48,7 +51,7 @@ class App extends React.Component {
     const webpack = new WebpackHandler({
       // from: 'ui/index.scss',
       // to: 'ui/index.css'
-      configPath: 'webpack.config.js'
+      configPath: path.join(window.args.path, 'webpack.config.js')
     })
     this.setState({
       webpack
@@ -128,7 +131,8 @@ class App extends React.Component {
   }
 }
 App.childContextTypes = ctxt('blurred', 'mini')
-window._tb = TitleBar
+
+window.args = querystring.parse(window.location.search.slice(1))
 ReactDOM.render(
   <App />,
   document.querySelector('main')
