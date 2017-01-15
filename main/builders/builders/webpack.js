@@ -75,6 +75,7 @@ exports = module.exports = class WebpackHandler extends Builder {
     return p.then(port => {
       this.config = require(path.resolve(this.opts.configPath))
       this.compiler = webpack(transform(this.config, Object.assign({}, this.opts, {
+        port,
         progress: (args) => {
           const ob = {}
           for (const { type, value } of args) {
