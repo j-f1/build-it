@@ -4,6 +4,7 @@ import DetailView from './detail-view'
 import Tab from './tab'
 import Settings from './settings'
 import Info from './info'
+import Combokeys from 'combokeys'
 
 export default class Content extends React.Component {
   constructor (...args) {
@@ -16,7 +17,40 @@ export default class Content extends React.Component {
     this.state = {
       tab: 2
     }
-    this._tabNames = ['warnings', 'errors']
+    this._tabNames = ['warnings', 'errors', 'info', 'analyzer', 'settings']
+  }
+  get tabs () {
+    return [{
+      title: 'Warning',
+      plural: 's',
+      icon: 'warning',
+      items: this.props.warnings,
+      iconStyle: {
+        color: vars.warning
+      }
+    }, {
+      title: 'Error',
+      plural: 's',
+      icon: 'exclamation-circle',
+      items: this.props.errors,
+      iconStyle: {
+        color: vars.error
+      }
+    }, {
+      title: 'Info',
+      icon: 'info-circle',
+      content: <Info stats={this.props.stats} />
+    }, {
+      title: 'Bundle Analysis',
+      content: <webview ref={this._webviewRef} src={this.props.analyzer} style={{
+        paddingTop: 0
+      }} />
+    }, {
+      title: 'Settings',
+      icon: 'cog',
+      pinned: true,
+      content: <Settings />
+    }]
   }
   select (name) {
     this._tabNames.includes(name) && this._select(this._tabNames.indexOf(name))
@@ -29,9 +63,19 @@ export default class Content extends React.Component {
   }
   componentDidMount () {
     this.props.status.on('built', this._reloadWebview)
+    this.shortcuts = new Combokeys(document.documentElement)
+    this.shortcuts.bind('ctrl+tab', () => {
+      this.setState(({ tab }) => ({
+        tab: (tab + 1) % this.tabs.length
+      }))
+    })
+    this.shortcuts.bind('ctrl+shift+tab', () => this.setState(({ tab }) => ({
+      tab: (tab - 1) % this.tabs.length
+    })))
   }
   componentWillUnmount () {
     this.props.status.removeListener('built', this._reloadWebview)
+    this.shortcuts.detach()
   }
   _webviewRef (ref) {
     this.webview = ref
@@ -75,48 +119,17 @@ export default class Content extends React.Component {
         }
       }
     }, this.context)
-    const tabs = [{
-      title: 'Warning',
-      plural: 's',
-      icon: 'warning',
-      items: this.props.warnings,
-      iconStyle: {
-        color: vars.warning
-      }
-    }, {
-      title: 'Error',
-      plural: 's',
-      icon: 'exclamation-circle',
-      items: this.props.errors,
-      iconStyle: {
-        color: vars.error
-      }
-    }, {
-      title: 'Info',
-      icon: 'info-circle',
-      content: <Info stats={this.props.stats} />
-    }, {
-      title: 'Bundle Analysis',
-      content: <webview ref={this._webviewRef} src={this.props.analyzer} style={{
-        paddingTop: 0
-      }} />
-    }, {
-      title: 'Settings',
-      icon: 'cog',
-      pinned: true,
-      content: <Settings />
-    }]
     return <div style={styles.container}>
       <ul style={styles.tabBar}>
-        {tabs.map((opts, i) => <Tab
+        {this.tabs.map((opts, i) => <Tab
           key={i}
           selected={i === this.state.tab}
           onSelect={() => this._select(i)}
           {...opts}
-          {...st.loop(i, tabs.length)} />
+          {...st.loop(i, this.tabs.length)} />
         )}
       </ul>
-      <DetailView style={styles.detail} data={tabs[this.state.tab]} />
+      <DetailView style={styles.detail} data={this.tabs[this.state.tab]} />
     </div>
   }
 }
