@@ -8,7 +8,7 @@ const wins = new Set()
 
 exports = module.exports = {
   createWindow (winArgs = {path: path.dirname(__dirname)}, arg = {}) {
-    const { hidden = false } = arg
+    const { hidden = false, openDevTools = false } = arg
     const w = new BrowserWindow({
       width: SMALL_SIZE.w,
       height: SMALL_SIZE.h,
@@ -23,7 +23,7 @@ exports = module.exports = {
     })
 
     w.loadURL(`file://${__dirname}/../ui/index.html?${querystring.stringify(winArgs)}`)
-    w.webContents.openDevTools()
+    openDevTools && w.webContents.openDevTools()
 
     if (hidden) {
       w.once('ready-to-show', () => w.show())
