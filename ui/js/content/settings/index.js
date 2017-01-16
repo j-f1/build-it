@@ -1,5 +1,5 @@
 import React from 'react'
-import { st } from '../util'
+import { st } from '../../util'
 
 export default class Settings extends React.Component {
   constructor (...args) {
