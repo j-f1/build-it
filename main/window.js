@@ -7,10 +7,8 @@ const { SMALL_SIZE } = require('./resizer')
 const wins = new Set()
 
 exports = module.exports = {
-  createWindow (arg, winArgs = {path: path.dirname(__dirname)}) {
-    const {
-      hidden = false
-    } = arg || {}
+  createWindow (winArgs = {path: path.dirname(__dirname)}, arg = {}) {
+    const { hidden = false } = arg
     const w = new BrowserWindow({
       width: SMALL_SIZE.w,
       height: SMALL_SIZE.h,
