@@ -1,4 +1,4 @@
-const { app, Menu, ipcMain } = require('electron')
+const { app, Menu, ipcMain, dialog } = require('electron')
 
 const { REACT_DEVELOPER_TOOLS, REACT_PERF, default: installExtension } = require('electron-devtools-installer')
 
@@ -16,13 +16,19 @@ app.on('ready', () => {
       .then((names) => names.map(name => console.log(`Added Extension:  ${name}`)))
       .catch((err) => console.error('An error occurred: ', err))
   require('devtron').install()
-  createWindow()
+  open()
   Menu.setApplicationMenu(getMenu({
     open
   }))
 })
 function open () {
-  createWindow()
+  dialog.showOpenDialog({
+    properties: ['openDirectory']
+  }, ([path]) => {
+    createWindow({
+      path
+    })
+  })
 }
 
 // Quit when all windows are closed.

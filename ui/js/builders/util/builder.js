@@ -1,16 +1,14 @@
+import EventEmitter from 'events'
+
 import moment from 'moment'
 import React from 'react'
-import weak from 'weak'
 
 import Observable from './observable'
-import { remote } from 'electron'
 import Task from './task'
-import _proxy from './proxy'
 
-const { makeBuilder } = remote.require('./builders')
-
-export default class BuilderProxy {
+export default class Builder extends EventEmitter {
   constructor (opts, defaults, className) {
+    super()
     this.opts = Object.assign({
       task: 'Building',
       label: []
@@ -22,19 +20,10 @@ export default class BuilderProxy {
       this.opts.label = [this.opts.label]
     }
 
-    this._main = makeBuilder({
-      name: className,
-      opts: this.opts,
-      updateProgress: this.updateProgress.bind(this),
-      setStats: this.setStats.bind(this)
-    })
-    this._listeners = new Set()
-    _proxy(this, this._main, 'start', 'stop', 'removeListener', /* 'emit', */ 'buildOK')
+    this._name = className
+
     window.addEventListener('beforeunload', () => {
-      this.stop().then(() => {
-        this._main.__del__()
-        this._main = null
-      })
+      this.stop()
     })
 
     this._task = new Task({
@@ -66,7 +55,7 @@ export default class BuilderProxy {
     })
   }
   toString () {
-    return `${this.constructor.name}<${this.opts.realName}>: ${this.task.value.toString()}`
+    return `${this._name}: ${this.task.value.toString()}`
   }
   updateProgress ({ progress, message }) {
     const task = this.task.value
@@ -81,18 +70,16 @@ export default class BuilderProxy {
   setStats (stats) {
     this.stats = stats
   }
-  async init (...args) {
-    weak(this, this._main.__del__()) // tell IPC to remove object when this one goes away.
-    return await this._main.init(...args)
+
+  async init () {
+    // parse config
+    throw new Error('must specify an init handler')
+  }
+  start () {
+    throw new Error('must specify a start function')
+  }
+  stop () {
+    throw new Error('must specify a stop function')
   }
 
-  on (...args) {
-    this._listeners.add(args)
-    this._main.on(...args)
-    return this
-  }
-  once (...args) {
-    this._main.once(...args)
-    return this
-  }
 }
