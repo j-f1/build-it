@@ -3,3 +3,4 @@ node_modules
 ui/index.js*
 /report.html
 .imdone/*
+build
