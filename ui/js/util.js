@@ -1,13 +1,17 @@
 import reactCSS, * as _reactCSSKeys from 'reactcss'
 import { classJoin } from 'css-classname'
+import info from 'pkginfo'
 import React from 'react'
+import depd from 'depd'
 
 import css from './css'
 
-export const cx = (...args) => {
-  console.error('Don’t use `cx`. Use `reactCSS`/`st` instead.')
+export const meta = info(module)
+export const deprecate = depd(meta.name)
+
+export const cx = deprecate.function((...args) => {
   return classJoin(...args)
-}
+}, 'Don’t use `cx`. Use `reactCSS`/`st` instead.')
 export function fa (icon, ...args) {
   return classJoin('fa', `fa-${icon}`, ...args)
 }
