@@ -39,7 +39,7 @@ export default function DetailView ({ data, style, hidden }) {
   const items = {}
   data.items.forEach((item) => {
     const key = item.loc
-    items[key] = (items[key] || []).concat(item.message.trim())
+    items[key] = (items[key] || []).concat(item.message ? item.message.trim() : item)
   })
   return <ul style={Object.assign({WebkitUserSelect: 'initial'}, style)} hidden={hidden}>
     {Object.keys(items).map((name, i) => <li key={i}>
