@@ -12,9 +12,6 @@ export const deprecate = depd(meta.name)
 export const cx = deprecate.function((...args) => {
   return classJoin(...args)
 }, 'Don’t use `cx`. Use `reactCSS`/`st` instead.')
-export function fa (icon, ...args) {
-  return classJoin('fa', `fa-${icon}`, ...args)
-}
 
 export function m (...args) {
   return Object.assign({}, ...args)

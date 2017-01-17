@@ -1,7 +1,9 @@
-import React from 'react'
-import { st, vars, fa } from '../util'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
+import FA from 'react-fontawesome'
 import { sineInOut } from 'eases'
+import React from 'react'
+
+import { st, vars } from '../util'
 
 const icons = {
   warnings: 'warning',
@@ -128,7 +130,7 @@ const _IssueContent = st.handleActive((props) => {
     }
   }, { active: props.active }, props.type)
   return <span style={props.style}><a onClick={issue.click} ref={props.ref_}>
-    <i style={styles.icon} className={fa(issue.icon || icons[props.type] || props.type)} />
+    <FA name={issue.icon || icons[props.type] || props.type} style={styles.icon} />
     {' ' + (typeof issue.count === 'number' ? issue.count : issue)}
   </a></span>
 })

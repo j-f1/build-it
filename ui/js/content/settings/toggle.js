@@ -1,6 +1,7 @@
+import FA from 'react-fontawesome'
 import React from 'react'
 
-import { st, fa } from '../../util'
+import { st } from '../../util'
 
 export default function Toggle (props) {
   const { leftIcon, leftTitle, rightIcon, rightTitle, style, value = false, onChange = () => {} } = props
@@ -72,11 +73,11 @@ export default function Toggle (props) {
       <span style={styles.thumb} />
     </span>
     <span className={Object.assign({}, styles.icon, styles.left)}>
-      <i className={fa(leftIcon, 'fa-fw')} />
+      <FA name={leftIcon} fixedWidth />
       <span style={styles.title}>{leftTitle}</span>
     </span>
     <span className={Object.assign({}, styles.icon, styles.right)}>
-      <i className={fa(rightIcon, 'fa-fw')} />
+      <FA name={rightIcon} fixedWidth />
       <span style={styles.title}>{rightTitle}</span>
     </span>
   </span>

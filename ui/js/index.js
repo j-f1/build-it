@@ -2,11 +2,12 @@ import querystring from 'querystring'
 import { remote } from 'electron'
 import path from 'path'
 
+import FA from 'react-fontawesome'
 import ReactDOM from 'react-dom'
 import React from 'react'
 
 import TitleBar, { TitleBarItem } from './title-bar'
-import { fa, st, ctxt, debounceRAF } from './util'
+import { st, ctxt, debounceRAF } from './util'
 import { WebpackHandler } from './builders'
 import { expand, shrink } from './resizer'
 import Content from './content'
@@ -115,7 +116,9 @@ class App extends React.Component {
             }
           }
         }}
-        rightItems={<TitleBarItem onClick={this.toggleWindow} title={`${this.state.expanded ? 'Shrink' : 'Expand'} Window`}><i className={fa('caret-square-o-' + (this.state.expanded ? 'up' : 'down'), 'fa-lg')} /></TitleBarItem>}
+        rightItems={<TitleBarItem onClick={this.toggleWindow} title={`${this.state.expanded ? 'Shrink' : 'Expand'} Window`}>
+          <FA name={'caret-square-o-' + (this.state.expanded ? 'up' : 'down')} size='lg' />
+        </TitleBarItem>}
       />
       <Content
         warnings={this.state.webpack.warnings}

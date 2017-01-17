@@ -1,5 +1,7 @@
+import FA from 'react-fontawesome'
 import React from 'react'
-import { fa, st, ctxt } from '../util'
+
+import { st, ctxt } from '../util'
 
 export default function Tab (props, context) {
   return <li onMouseDown={props.onSelect} style={props.pinned ? {} : { flex: 1 }}>
@@ -84,7 +86,7 @@ function _TabContent (props, context) {
   return <div style={props.selected
     ? Object.assign({}, styles.tab, styles.activeTab)
     : styles.tab}>
-    <i className={fa(props.icon)} style={(props.items || []).length ? props.iconStyle : {}} />
+    <FA name={props.icon} style={(props.items || []).length ? props.iconStyle : {}} />
     {props.pinned || `\u{200B} ${props.items ? props.items.length : ''} ${props.title}${(!props.items || props.items.length === 1) ? '' : props.plural}`}
   </div>
 }
