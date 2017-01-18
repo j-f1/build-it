@@ -1,15 +1,45 @@
+import debounce from 'debounce'
 import React from 'react'
+
 import { st } from '../../util'
+
+import Toggle from './toggle'
 
 export default class Settings extends React.Component {
   constructor (...args) {
     super(...args)
+    this._toggleCustom = this._toggleCustom.bind(this)
+    this._toggleProd = this._toggleProd.bind(this)
+    const setEnv = debounce(this._setEnv.bind(this), 1000)
+    this._setEnv = e => {
+      setEnv(e.target.value)
+    }
+    this._inputRef = this._inputRef.bind(this)
     this.state = {
-      env: ''
+      custom: false
     }
   }
-  _update (key) {
-    return ({ target: { value } }) => this.setState({ [key]: value })
+  _toggleProd (isProd) {
+    this.props.setEnv(isProd ? 'production' : 'dev')
+    ;(this._input || {}).value = isProd ? 'production' : 'dev'
+  }
+  _toggleCustom (e) {
+    e.preventDefault()
+    this.setState(({ custom }) => ({
+      custom: !custom
+    }))
+  }
+  _inputRef (ref) {
+    this._input = ref
+  }
+  _setEnv (env) {
+    ;(this._input || {}).value = env
+    try {
+      env = JSON.parse(env)
+    } catch (e) {
+      // invalid JSON; leave as a string
+    }
+    this.props.setEnv(env)
   }
   render () {
     const styles = st({
@@ -25,11 +55,44 @@ export default class Settings extends React.Component {
         }
       }
     })
+    const isProd = this.props.env.startsWith('prod')
     return <form style={Object.assign({}, this.props.style, styles.container, this.props.hidden && { display: 'none' })}><section style={styles.section}>
-      <h1 style={{marginTop: 0}}>webpack</h1>
-      <p style={{marginBottom: 0}}><label>Environment: <Input el='textarea' value={this.state.env} onChange={this._update('env')} style={{
-        fontFamily: 'Fira Code'
-      }} /></label></p>
+      <h1 style={{marginTop: 0}}>Environment <a href='#' onClick={this._toggleCustom} style={{
+        fontWeight: 'normal',
+        fontSize: '1rem',
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        width: 60
+      }}>{this.state.custom ? 'Default' : 'Custom'}</a></h1>
+      {this.state.custom
+        ? <Input
+          style={{
+            height: 50,
+            width: 275,
+            fontFamily: 'Fira Code, Fira Mono, Menlo, Courier New, monospace'
+          }}
+          ref={this._inputRef}
+          el='textarea'
+          defaultValue={this.props.env}
+          onChange={this._setEnv}
+        /> : <Toggle
+          style={{
+            width: 275
+          }}
+          leftIcon='code-fork'
+          leftTitle='Dev'
+          rightIcon='rocket'
+          rightTitle='Prod'
+          value={isProd}
+          onChange={this._toggleProd}
+        />
+      }
+      <br />
+      <small style={{
+        opacity: 0.5,
+        display: 'inline-block',
+        transform: 'translateY(' + (this.state.custom ? 0 : -2) + 'em)'
+      }}>Changing restarts webpack</small>
     </section></form>
   }
 }
@@ -42,12 +105,12 @@ function _Input (props) {
       container: {
         display: 'inline-flex',
         borderRadius: 2,
-        transition: 'box-shadow .25s cubic-bezier(0.165, 0.840, 0.440, 1)' /* easeOutQuart */
+        transition: 'box-shadow .25s cubic-bezier(0.165, 0.840, 0.440, 1)' // easeOutQuart
       },
       input: {
         border: '1px solid',
         borderColor: '#BFBFBF',
-        transition: 'border .25s cubic-bezier(0.165, 0.840, 0.440, 1)', /* easeOutQuart */
+        transition: 'border .25s cubic-bezier(0.165, 0.840, 0.440, 1)', // easeOutQuart
         background: 'transparent'
       }
     },

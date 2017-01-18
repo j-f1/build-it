@@ -18,7 +18,8 @@ class App extends React.Component {
     this.toggleWindow = this.toggleWindow.bind(this)
     this.state = {
       expanded: false,
-      blurred: window.focusHandler.blurred
+      blurred: window.focusHandler.blurred,
+      env: 'dev'
     }
     this._focus = () => this.setState({blurred: false})
     this._blur = () => this.setState({blurred: true})
@@ -27,8 +28,18 @@ class App extends React.Component {
       this.setState({task})
     })
     this._built = this._built.bind(this)
+    this._setEnv = this._setEnv.bind(this)
 
     window.focusHandler.on('focus', this._focus).on('blur', this._blur)
+  }
+  _setEnv (env) {
+    this.setState({
+      env
+    })
+    console.log(env)
+    this.state.webpack.kill().then(() => this.state.webpack.init({
+      env
+    })).then(() => this.state.webpack.start()).catch(console.warn)
   }
   _built (err) {
     if (err) {
@@ -60,7 +71,9 @@ class App extends React.Component {
   }
   componentDidMount () {
     const webpack = this.state.webpack
-    webpack.init().then(() => webpack.start())
+    webpack.init({
+      env: this.state.env
+    }).then(() => webpack.start())
     webpack.task.on('change', this._updateTask)
     webpack.on('built', this._built)
   }
@@ -69,6 +82,7 @@ class App extends React.Component {
     window.focusHandler.removeListener('blur', this._blur)
     this.state.webpack.task.removeListener('change', this._updateTask)
     this.state.webpack.removeListener('built', this._built)
+    this.state.webpack.kill()
   }
   toggleWindow () {
     this.setState(({ expanded }) => ({
@@ -126,6 +140,8 @@ class App extends React.Component {
         analyzer={this.state.webpack.opts.visualizerOutput}
         stats={this.state.webpack.stats}
         status={this.state.webpack}
+        env={this.state.env}
+        setEnv={this._setEnv}
         ref={ref => {
           this._content = ref
         }}
