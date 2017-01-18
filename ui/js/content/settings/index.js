@@ -1,7 +1,7 @@
 import debounce from 'debounce'
 import React from 'react'
 
-import { st } from '../../util'
+import { st, cancel } from '../../util'
 
 import Toggle from './toggle'
 
@@ -14,6 +14,7 @@ export default class Settings extends React.Component {
     this._setEnv = e => {
       setEnv(e.target.value)
     }
+    this._setShortHashLength = this._setShortHashLength.bind(this)
     this.state = {
       custom: false
     }
@@ -35,6 +36,9 @@ export default class Settings extends React.Component {
     }
     this.props.setEnv(env)
   }
+  _setShortHashLength (e) {
+    this.props.setShortHashLength(e.target.value)
+  }
   render () {
     const styles = st({
       default: {
@@ -44,50 +48,62 @@ export default class Settings extends React.Component {
           alignItems: 'center',
           textAlign: 'center'
         },
-        section: {
+        wrap: {
           margin: 'auto'
+        },
+        section: {
+          WebkitMarginBefore: '1em',
+          WebkitMarginAfter: '1em'
         }
       }
     })
     const isProd = this.props.env.startsWith('prod')
-    return <form style={Object.assign({}, this.props.style, styles.container)} hidden={this.props.hidden}><section style={styles.section}>
-      <h1 style={{marginTop: 0}}>Environment <a href='#' onClick={this._toggleCustom} style={{
-        fontWeight: 'normal',
-        fontSize: '1rem',
-        display: 'inline-block',
-        verticalAlign: 'middle',
-        width: 60
-      }}>{this.state.custom ? 'Default' : 'Custom'}</a></h1>
-      {this.state.custom
-        ? <Input
-          style={{
-            height: 50,
-            width: 275,
-            fontFamily: 'Fira Code, Fira Mono, Menlo, Courier New, monospace'
-          }}
-          el='textarea'
-          defaultValue={this.props.env}
-          onChange={this._setEnv}
-        /> : <Toggle
-          style={{
-            width: 275
-          }}
-          leftIcon='code-fork'
-          leftTitle='Dev'
-          rightIcon='rocket'
-          rightTitle='Prod'
-          value={isProd}
-          onChange={this._toggleProd}
-        />
-      }
-      <small style={{
-        opacity: 0.5,
-        display: 'block',
-        transform: 'translateY(' + (this.state.custom ? 0.25 : -0.5) + 'em)',
-        position: 'absolute',
-        left: 0,
-        width: '100%'
-      }}>Changing restarts webpack</small>
+    return <form style={Object.assign({}, this.props.style, styles.container)} hidden={this.props.hidden} onSubmit={cancel}><section style={styles.wrap}>
+      <section style={Object.assign({
+        paddingBottom: '1.1em'
+      }, styles.section)}>
+        <h1 style={{marginTop: 0}}>Environment <a href='#' onClick={this._toggleCustom} style={{
+          fontWeight: 'normal',
+          fontSize: '1rem',
+          display: 'inline-block',
+          verticalAlign: 'middle',
+          width: 60
+        }}>{this.state.custom ? 'Default' : 'Custom'}</a></h1>
+        {this.state.custom
+          ? <Input
+            style={{
+              height: 50,
+              width: 275,
+              fontFamily: 'Fira Code, Fira Mono, Menlo, Courier New, monospace'
+            }}
+            el='textarea'
+            defaultValue={this.props.env}
+            onChange={this._setEnv}
+          /> : <Toggle
+            style={{
+              width: 275,
+              margin: 'auto'
+            }}
+            leftIcon='code-fork'
+            leftTitle='Dev'
+            rightIcon='rocket'
+            rightTitle='Prod'
+            value={isProd}
+            onChange={this._toggleProd}
+          />
+        }
+        <small style={{
+          opacity: 0.5,
+          display: 'block',
+          transform: 'translateY(' + (this.state.custom ? 0.25 : -0.5) + 'em)',
+          position: 'absolute',
+          left: 0,
+          width: '100%'
+        }}>Changing restarts webpack</small>
+      </section>
+      <section style={styles.section}>
+        <label>Number of characters in short hash: <Input type='number' value={this.props.shortHashLength} onChange={this._setShortHashLength} style={{width: '4ch'}} /></label>
+      </section>
     </section></form>
   }
 }

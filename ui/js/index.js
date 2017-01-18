@@ -19,7 +19,8 @@ class App extends React.Component {
     this.state = {
       expanded: false,
       blurred: window.focusHandler.blurred,
-      env: 'dev'
+      env: 'dev',
+      shortHashLength: 7
     }
     this._focus = () => this.setState({blurred: false})
     this._blur = () => this.setState({blurred: true})
@@ -29,8 +30,15 @@ class App extends React.Component {
     })
     this._built = this._built.bind(this)
     this._setEnv = this._setEnv.bind(this)
+    this._setShortHashLength = this._setShortHashLength.bind(this)
 
     window.focusHandler.on('focus', this._focus).on('blur', this._blur)
+  }
+
+  _setShortHashLength (shortHashLength) {
+    this.setState({
+      shortHashLength
+    })
   }
   _setEnv (env) {
     this.setState({
@@ -139,8 +147,12 @@ class App extends React.Component {
         analyzer={this.state.webpack.opts.visualizerOutput}
         stats={this.state.webpack.stats}
         status={this.state.webpack}
+
         env={this.state.env}
         setEnv={this._setEnv}
+        shortHashLength={this.state.shortHashLength}
+        setShortHashLength={this._setShortHashLength}
+
         ref={ref => {
           this._content = ref
         }}

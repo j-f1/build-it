@@ -91,3 +91,8 @@ export function debounceRAF (f) {
     }
   }
 }
+
+export function cancel (event) {
+  event.preventDefault()
+  event.stopPropagation()
+}
