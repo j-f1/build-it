@@ -36,31 +36,30 @@ export default class WebpackHandler extends Builder {
       visualizerOutput: path.join(os.tmpdir(), uuid(), 'stats.html')
     }, 'WebpackHandler')
   }
-  init () {
-    let p
+  async init (opts) {
+    let port
     if (this.opts.port === DEFAULT_PORT) {
-      p = getPort()
+      port = await getPort()
     } else {
-      p = Promise.resolve(this.opts.port)
+      port = this.opts.port
     }
-    return p.then(port => {
-      this._proc = fork(path.join(require('electron').remote.app.getAppPath(), 'ui', 'js', 'builders', 'webpack', 'wrapper'), {
-        cwd: path.dirname(path.resolve(this.opts.configPath)),
-        silent: true,
-        env: {
-          ELECTRON_RUN_AS_NODE: 1
-        }
-      })
-      this._proc.stdout.on('data', val => console.log(String(val)))
-      this._proc.stderr.on('data', val => console.warn(String(val)))
-      this._ipc = new IPCHandler(this._proc)
-      this._ipc.send('init', {
-        port,
-        opts: this.opts
-      })
-      this._ipc.on('set stats', stats => this.setStats(stats))
-      this._ipc.on('built', () => this.emit('built'))
-      this._ipc.on('update progress', stuff => this.updateProgress(stuff))
+    this._proc = fork(path.join(require('electron').remote.app.getAppPath(), 'ui', 'js', 'builders', 'webpack', 'wrapper'), {
+      cwd: path.dirname(path.resolve(this.opts.configPath)),
+      silent: true,
+      env: {
+        ELECTRON_RUN_AS_NODE: 1
+      }
+    })
+    this._proc.stdout.on('data', val => console.log(String(val)))
+    this._proc.stderr.on('data', val => console.warn(String(val)))
+
+    this._ipc = new IPCHandler(this._proc)
+    this._ipc.on('set stats', stats => this.setStats(stats))
+    this._ipc.on('built', () => this.emit('built'))
+    this._ipc.on('update progress', stuff => this.updateProgress(stuff))
+    return this._ipc.send('init', {
+      port,
+      opts: Object.assign({}, this.opts, opts)
     })
   }
   start () {
@@ -68,6 +67,16 @@ export default class WebpackHandler extends Builder {
   }
   stop () {
     return this._ipc.send('stop')
+  }
+  kill () {
+    return this.stop().then(new Promise((resolve, reject) => {
+      this._proc.once('exit', () => {
+        console.log('bye!!1')
+        resolve()
+      })
+      this._proc.kill()
+      window._p = this._proc
+    }))
   }
   buildOK () {
     if (!this.stats) {
