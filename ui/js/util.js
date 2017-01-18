@@ -6,7 +6,10 @@ import depd from 'depd'
 
 import css from './css'
 
-export const meta = info(module)
+const mod = Object.create(window.module)
+mod.exports = Object.create(window.module.exports)
+info(mod)
+export const meta = mod.exports
 export const deprecate = depd(meta.name)
 
 export const cx = deprecate.function((...args) => {
