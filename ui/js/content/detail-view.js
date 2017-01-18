@@ -37,6 +37,18 @@ export default function DetailView ({ data, style, hidden, ...props }) {
     const Content = data.content
     return <Content style={style} hidden={hidden} {...props} />
   }
+  if (!data.items.length) {
+    return <div style={Object.assign({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontWeight: 'bold',
+      fontSize: '2em',
+      opacity: 0.25
+    }, style)} hidden={hidden}>
+      No {data.title}{data.plural}
+    </div>
+  }
   const items = {}
   data.items.forEach((item) => {
     const key = item.loc
