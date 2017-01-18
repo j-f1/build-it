@@ -38,14 +38,14 @@ export default function DetailView ({ data, style, hidden, ...props }) {
     return <Content style={style} hidden={hidden} {...props} />
   }
   if (!data.items.length) {
-    return <div style={Object.assign({
+    return <div style={Object.assign({}, style, {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       fontWeight: 'bold',
       fontSize: '2em',
       opacity: 0.25
-    }, style)} hidden={hidden}>
+    })} hidden={hidden}>
       No {data.title}{data.plural}
     </div>
   }
@@ -54,7 +54,10 @@ export default function DetailView ({ data, style, hidden, ...props }) {
     const key = item.loc
     items[key] = (items[key] || []).concat(item.message ? item.message.trim() : item)
   })
-  return <ul style={Object.assign({WebkitUserSelect: 'initial'}, style)} hidden={hidden}>
+  return <ul style={Object.assign({
+    WebkitUserSelect: 'initial',
+    paddingTop: '1em'
+  }, style)} hidden={hidden}>
     {Object.keys(items).map((name, i) => <li key={i}>
       <strong>{name}</strong>
       {items[name].length > 1

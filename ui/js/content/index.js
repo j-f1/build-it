@@ -82,8 +82,7 @@ export default class Content extends React.Component {
         detail: {
           flex: 1,
           overflow: 'auto',
-          margin: 0,
-          paddingTop: '1em'
+          margin: 0
         },
         tabBar: {
           listStyleType: 'none',

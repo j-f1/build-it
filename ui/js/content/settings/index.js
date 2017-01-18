@@ -49,7 +49,6 @@ export default class Settings extends React.Component {
     const styles = st({
       default: {
         container: {
-          paddingTop: 0,
           display: 'flex',
           alignItems: 'center',
           textAlign: 'center'

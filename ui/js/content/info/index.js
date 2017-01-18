@@ -15,8 +15,7 @@ export default function Info (props) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 0
+        justifyContent: 'center'
       }
     }
   }, props)

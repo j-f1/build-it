@@ -19,8 +19,6 @@ export default class BundleAnalysis extends React.Component {
     this.webview = ref
   }
   render () {
-    return <webview hidden={this.props.hidden} ref={this._webviewRef} src={this.props.analyzer} style={Object.assign(this.props.style, {
-      paddingTop: 0
-    })} />
+    return <webview hidden={this.props.hidden} ref={this._webviewRef} src={this.props.analyzer} style={this.props.style} />
   }
 }
