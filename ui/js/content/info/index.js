@@ -23,12 +23,12 @@ export default function Info (props) {
   if (!stats) {
     return <article style={Object.assign({
       textAlign: 'center'
-    }, props.style, styles.container, props.hidden && { display: 'none' })}>
+    }, props.style, styles.container)} hidden={props.hidden}>
       <h3>Compiling…</h3>
       <small>Info will appear when finished</small>
     </article>
   }
-  return <article style={Object.assign({}, props.style, styles.container, props.hidden && { display: 'none' })}>
+  return <article style={Object.assign({}, props.style, styles.container)} hidden={props.hidden}>
     <div style={{
       overflow: 'auto',
       padding: '0 1em'

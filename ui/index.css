@@ -19,3 +19,7 @@ pre code .react-ansi-style-green {
 pre code .react-ansi-style-bgRed {
   background-color: firebrick;
 }
+
+[hidden] {
+  display: none !important
+}

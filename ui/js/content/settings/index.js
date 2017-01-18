@@ -50,7 +50,7 @@ export default class Settings extends React.Component {
       }
     })
     const isProd = this.props.env.startsWith('prod')
-    return <form style={Object.assign({}, this.props.style, styles.container, this.props.hidden && { display: 'none' })}><section style={styles.section}>
+    return <form style={Object.assign({}, this.props.style, styles.container)} hidden={this.props.hidden}><section style={styles.section}>
       <h1 style={{marginTop: 0}}>Environment <a href='#' onClick={this._toggleCustom} style={{
         fontWeight: 'normal',
         fontSize: '1rem',
