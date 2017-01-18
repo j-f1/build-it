@@ -69,14 +69,9 @@ export default class WebpackHandler extends Builder {
     return this._ipc.send('stop')
   }
   kill () {
-    return this.stop().then(new Promise((resolve, reject) => {
-      this._proc.once('exit', () => {
-        console.log('bye!!1')
-        resolve()
-      })
+    return this.stop().then(() => {
       this._proc.kill()
-      window._p = this._proc
-    }))
+    })
   }
   buildOK () {
     if (!this.stats) {
