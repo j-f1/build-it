@@ -20,7 +20,6 @@ export default function Toggle (props) {
         height: '1em',
         margin: '0 1em',
         borderRadius: '0.25em',
-        overflow: 'hidden',
         position: 'relative',
         textAlign: 'right',
         pointerEvents: 'none'
@@ -72,11 +71,11 @@ export default function Toggle (props) {
     <span style={styles.track}>
       <span style={styles.thumb} />
     </span>
-    <span className={Object.assign({}, styles.icon, styles.left)}>
+    <span style={Object.assign({}, styles.icon, styles.left)}>
       <FA name={leftIcon} fixedWidth />
       <span style={styles.title}>{leftTitle}</span>
     </span>
-    <span className={Object.assign({}, styles.icon, styles.right)}>
+    <span style={Object.assign({}, styles.icon, styles.right)}>
       <FA name={rightIcon} fixedWidth />
       <span style={styles.title}>{rightTitle}</span>
     </span>
