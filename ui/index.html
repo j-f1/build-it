@@ -57,6 +57,7 @@
       .on('focus', () => document.documentElement.classList.remove('blurred'))
       .on('blur', () => document.documentElement.classList.add('blurred'))
 
+    window.args = require('querystring').parse(window.location.search.slice(1))
   </script>
   <script src="index.js" charset="utf-8"></script>
 </html>

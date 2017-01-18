@@ -1,4 +1,3 @@
-import querystring from 'querystring'
 import { remote } from 'electron'
 import path from 'path'
 
@@ -12,15 +11,15 @@ import { WebpackHandler } from './builders'
 import { expand, shrink } from './resizer'
 import Content from './content'
 
+import { settings } from './settings'
+
 class App extends React.Component {
   constructor (...args) {
     super(...args)
     this.toggleWindow = this.toggleWindow.bind(this)
     this.state = {
       expanded: false,
-      blurred: window.focusHandler.blurred,
-      env: 'dev',
-      shortHashLength: 7
+      blurred: window.focusHandler.blurred
     }
     this._focus = () => this.setState({blurred: false})
     this._blur = () => this.setState({blurred: true})
@@ -29,25 +28,17 @@ class App extends React.Component {
       this.setState({task})
     })
     this._built = this._built.bind(this)
-    this._setEnv = this._setEnv.bind(this)
-    this._setShortHashLength = this._setShortHashLength.bind(this)
+    this._settingsDidChange = this._settingsDidChange.bind(this)
+    settings.defaults({
+      env: 'dev',
+      shortHashLength: 7
+    })
+
+    this.forceUpdate = this.forceUpdate.bind(this)
 
     window.focusHandler.on('focus', this._focus).on('blur', this._blur)
   }
 
-  _setShortHashLength (shortHashLength) {
-    this.setState({
-      shortHashLength
-    })
-  }
-  _setEnv (env) {
-    this.setState({
-      env
-    })
-    this.state.webpack.kill().then(() => this.state.webpack.init({
-      env
-    })).then(() => this.state.webpack.start()).catch(console.warn)
-  }
   _built (err) {
     if (err) {
       console.error(err)
@@ -59,6 +50,14 @@ class App extends React.Component {
         task: null
       }), 100)
     })
+  }
+  _settingsDidChange (old) {
+    if (old.env !== settings.env) {
+      this.state.webpack.kill().then(() => this.state.webpack.init({
+        env: settings.env
+      })).then(() => this.state.webpack.start()).catch(console.warn)
+    }
+    this.forceUpdate()
   }
   getChildContext () {
     return {
@@ -83,6 +82,7 @@ class App extends React.Component {
     }).then(() => webpack.start())
     webpack.task.on('change', this._updateTask)
     webpack.on('built', this._built)
+    settings.events.on('change', this._settingsDidChange)
   }
   componentWillUnmount () {
     window.focusHandler.removeListener('focus', this._focus)
@@ -90,6 +90,7 @@ class App extends React.Component {
     this.state.webpack.task.removeListener('change', this._updateTask)
     this.state.webpack.removeListener('built', this._built)
     this.state.webpack.kill()
+    settings.events.removeListener('change', this.forceUpdate)
   }
   toggleWindow () {
     this.setState(({ expanded }) => ({
@@ -148,10 +149,7 @@ class App extends React.Component {
         stats={this.state.webpack.stats}
         status={this.state.webpack}
 
-        env={this.state.env}
-        setEnv={this._setEnv}
-        shortHashLength={this.state.shortHashLength}
-        setShortHashLength={this._setShortHashLength}
+        settings={settings}
 
         ref={ref => {
           this._content = ref
@@ -162,7 +160,7 @@ class App extends React.Component {
 }
 App.childContextTypes = ctxt('blurred', 'mini')
 
-window.args = querystring.parse(window.location.search.slice(1))
+window._s = settings
 ReactDOM.render(
   <App />,
   document.querySelector('main')

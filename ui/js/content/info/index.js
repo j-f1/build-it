@@ -8,7 +8,7 @@ import Assets from './assets'
 import Hash from './hash'
 
 export default function Info (props) {
-  const { stats, shortHashLength } = props
+  const { stats, settings } = props
   const styles = st({
     default: {
       container: {
@@ -34,7 +34,7 @@ export default function Info (props) {
       padding: '0 1em'
     }}>
       <p><Timings stats={stats} /></p>
-      <p><Hash stats={stats} shortHashLength={shortHashLength} /></p>
+      <p><Hash stats={stats} settings={settings} /></p>
       <h3>Assets</h3>
       <Assets stats={stats} />
       <details style={{

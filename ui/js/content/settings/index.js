@@ -20,7 +20,9 @@ export default class Settings extends React.Component {
     }
   }
   _toggleProd (isProd) {
-    this.props.setEnv(isProd ? 'production' : 'dev')
+    this.props.settings.commit({
+      env: isProd ? 'production' : 'dev'
+    })
   }
   _toggleCustom (e) {
     e.preventDefault()
@@ -34,10 +36,14 @@ export default class Settings extends React.Component {
     } catch (e) {
       // invalid JSON; leave as a string
     }
-    this.props.setEnv(env)
+    this.props.settings.commit({
+      env
+    })
   }
   _setShortHashLength (e) {
-    this.props.setShortHashLength(e.target.value)
+    this.props.settings.commit({
+      shortHashLength: e.target.value
+    })
   }
   render () {
     const styles = st({
@@ -57,7 +63,7 @@ export default class Settings extends React.Component {
         }
       }
     })
-    const isProd = this.props.env.startsWith('prod')
+    const isProd = this.props.settings.env.startsWith('prod')
     return <form style={Object.assign({}, this.props.style, styles.container)} hidden={this.props.hidden} onSubmit={cancel}><section style={styles.wrap}>
       <section style={Object.assign({
         paddingBottom: '1.1em'
@@ -77,7 +83,7 @@ export default class Settings extends React.Component {
               fontFamily: 'Fira Code, Fira Mono, Menlo, Courier New, monospace'
             }}
             el='textarea'
-            defaultValue={this.props.env}
+            defaultValue={this.props.settings.env}
             onChange={this._setEnv}
           /> : <Toggle
             style={{
@@ -102,7 +108,7 @@ export default class Settings extends React.Component {
         }}>Changing restarts webpack</small>
       </section>
       <section style={styles.section}>
-        <label>Number of characters in short hash: <Input type='number' value={this.props.shortHashLength} onChange={this._setShortHashLength} style={{width: '4ch'}} /></label>
+        <label>Number of characters in short hash: <Input type='number' value={this.props.settings.shortHashLength} onChange={this._setShortHashLength} style={{width: '4ch'}} /></label>
       </section>
     </section></form>
   }
