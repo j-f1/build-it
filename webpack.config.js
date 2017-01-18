@@ -29,8 +29,23 @@ const getExternals = (modules) => {
   return ob
 }
 
+const normalizeEnv = (env) => {
+  env = (process.env.NODE_ENV || env).toLowerCase()
+  if (normalizeEnv.shortcuts[env]) {
+    return normalizeEnv.shortcuts[env]
+  }
+  if (!env) {
+    return 'development'
+  }
+  return env
+}
+normalizeEnv.shortcuts = {
+  dev: 'development',
+  prod: 'production'
+}
+
 module.exports = (envArg) => {
-  const env = (process.env.NODE_ENV || envArg === 'prod' ? 'production' : envArg || 'development').toLowerCase()
+  const env = normalizeEnv(envArg)
   const dev = env === 'development'
   const prod = env === 'production'
   console.log('Environment: \u001b[1m' + env + '\u001b[22m')
