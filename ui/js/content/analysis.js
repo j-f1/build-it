@@ -13,7 +13,6 @@ export default class BundleAnalysis extends React.Component {
     this.props.status.removeListener('built', this._reloadWebview)
   }
   _reloadWebview () {
-    // XXX: not working!
     this.webview && this.webview.reload()
   }
   _webviewRef (ref) {
