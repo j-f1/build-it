@@ -19,8 +19,12 @@ export default class IPCHandler extends EventEmitter {
       id
     })
     if (wantsReply) {
-      return new Promise(resolve => {
-        this.once(`reply to ${id}`, resolve)
+      return new Promise((resolve, reject) => {
+        this.once(`reply to ${id}`, (...args) => {
+          resolve(...args)
+          this._proc.removeListener('error', reject)
+        })
+        this._proc.once('error', reject)
       })
     }
   }
