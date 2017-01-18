@@ -36,7 +36,6 @@ class App extends React.Component {
     this.setState({
       env
     })
-    console.log(env)
     this.state.webpack.kill().then(() => this.state.webpack.init({
       env
     })).then(() => this.state.webpack.start()).catch(console.warn)

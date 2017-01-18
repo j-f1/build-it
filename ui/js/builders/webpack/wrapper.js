@@ -146,7 +146,6 @@ const stringify = (() => {
       try {
         JSON.stringify(list)
       } catch (_) {
-        console.log(list)
       }
       return space
       ? ' ' + JSON.stringify(list, null, space)
