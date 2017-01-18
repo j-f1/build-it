@@ -8,6 +8,7 @@ body {
   font-family: -apple-system, SF UI Text, San Fransico Text, San Francisco, Helvetica Neue, Helvetica, Segoe UI, sans-serif;
   user-select: none;
   overflow: hidden;
+  cursor: default;
 }
 *:focus {
   outline: none;
