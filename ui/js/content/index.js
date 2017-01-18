@@ -1,19 +1,17 @@
+import Combokeys from 'combokeys'
 import React from 'react'
 
 import { st, ctxt, vars } from '../util'
 
+import BundleAnalysis from './analysis'
 import DetailView from './detail-view'
-import Tab from './tab'
 import Settings from './settings'
 import Info from './info'
-import Combokeys from 'combokeys'
+import Tab from './tab'
 
 export default class Content extends React.Component {
   constructor (...args) {
     super(...args)
-    this._webviewRef = this._webviewRef.bind(this)
-    this._reloadWebview = this._reloadWebview.bind(this)
-
     this._select = this._select.bind(this)
     this.select = this.select.bind(this)
     this.state = {
@@ -44,9 +42,7 @@ export default class Content extends React.Component {
       content: <Info stats={this.props.stats} />
     }, {
       title: 'Bundle Analysis',
-      content: <webview ref={this._webviewRef} src={this.props.analyzer} style={{
-        paddingTop: 0
-      }} />
+      content: <BundleAnalysis />
     }, {
       title: 'Settings',
       icon: 'cog',
@@ -60,12 +56,7 @@ export default class Content extends React.Component {
   _select (tab) {
     this.setState({ tab })
   }
-  _reloadWebview () {
-    // XXX: not working!
-    this.webview && this.webview.reload()
-  }
   componentDidMount () {
-    this.props.status.on('built', this._reloadWebview)
     this.shortcuts = new Combokeys(document.documentElement)
     this.shortcuts.bind('ctrl+tab', () => {
       this.setState(({ tab }) => ({
@@ -77,11 +68,7 @@ export default class Content extends React.Component {
     })))
   }
   componentWillUnmount () {
-    this.props.status.removeListener('built', this._reloadWebview)
     this.shortcuts.detach()
-  }
-  _webviewRef (ref) {
-    this.webview = ref
   }
   render () {
     const styles = st({
@@ -132,7 +119,7 @@ export default class Content extends React.Component {
           {...st.loop(i, this.tabs.length)} />
         )}
       </ul>
-      {this.tabs.map((data, i) => <DetailView key={i} style={styles.detail} data={data} hidden={i !== this.state.tab} />)}
+      {this.tabs.map((data, i) => <DetailView key={i} style={styles.detail} data={data} hidden={i !== this.state.tab} {...this.props} />)}
     </div>
   }
 }
