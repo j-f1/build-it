@@ -14,14 +14,12 @@ export default class Settings extends React.Component {
     this._setEnv = e => {
       setEnv(e.target.value)
     }
-    this._inputRef = this._inputRef.bind(this)
     this.state = {
       custom: false
     }
   }
   _toggleProd (isProd) {
     this.props.setEnv(isProd ? 'production' : 'dev')
-    ;(this._input || {}).value = isProd ? 'production' : 'dev'
   }
   _toggleCustom (e) {
     e.preventDefault()
@@ -29,11 +27,7 @@ export default class Settings extends React.Component {
       custom: !custom
     }))
   }
-  _inputRef (ref) {
-    this._input = ref
-  }
   _setEnv (env) {
-    ;(this._input || {}).value = env
     try {
       env = JSON.parse(env)
     } catch (e) {
@@ -71,7 +65,6 @@ export default class Settings extends React.Component {
             width: 275,
             fontFamily: 'Fira Code, Fira Mono, Menlo, Courier New, monospace'
           }}
-          ref={this._inputRef}
           el='textarea'
           defaultValue={this.props.env}
           onChange={this._setEnv}
@@ -87,11 +80,13 @@ export default class Settings extends React.Component {
           onChange={this._toggleProd}
         />
       }
-      <br />
       <small style={{
         opacity: 0.5,
-        display: 'inline-block',
-        transform: 'translateY(' + (this.state.custom ? 0 : -2) + 'em)'
+        display: 'block',
+        transform: 'translateY(' + (this.state.custom ? 0.25 : -0.5) + 'em)',
+        position: 'absolute',
+        left: 0,
+        width: '100%'
       }}>Changing restarts webpack</small>
     </section></form>
   }
