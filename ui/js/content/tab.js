@@ -86,7 +86,7 @@ function _TabContent (props, context) {
   return <div style={props.selected
     ? Object.assign({}, styles.tab, styles.activeTab)
     : styles.tab}>
-    <FA name={props.icon} style={(props.items || []).length ? props.iconStyle : {}} />
+    {props.icon && <FA name={props.icon} style={(props.items || []).length ? props.iconStyle : {}} />}
     {props.pinned || `\u{200B} ${props.items ? props.items.length : ''} ${props.title}${(!props.items || props.items.length === 1) ? '' : props.plural}`}
   </div>
 }
