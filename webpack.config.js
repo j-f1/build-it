@@ -30,12 +30,9 @@ const getExternals = (modules) => {
 }
 
 const normalizeEnv = (env) => {
-  env = (process.env.NODE_ENV || env).toLowerCase()
+  env = (process.env.NODE_ENV || env || 'development').toLowerCase()
   if (normalizeEnv.shortcuts[env]) {
     return normalizeEnv.shortcuts[env]
-  }
-  if (!env) {
-    return 'development'
   }
   return env
 }
