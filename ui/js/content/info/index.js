@@ -23,7 +23,7 @@ export default function Info (props) {
   if (!stats) {
     return <article style={Object.assign({
       textAlign: 'center'
-    }, props.style, styles.container)}>
+    }, props.style, styles.container, props.hidden && { display: 'none' })}>
       <h3>Compiling…</h3>
       <small>Info will appear when finished</small>
     </article>
