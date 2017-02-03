@@ -34,7 +34,7 @@
   "dependencies": {
     "ansi-to-react": "0.0.5",
     "ansi-to-react-with-classes": "0.0.6",
-    "build-electron-app": "file:///Users/hayfields/Documents/Jed_Folder/electron/build-electron-app",
+    "build-electron-app": "j-f1/build-electron-app",
     "combokeys": "^2.4.6",
     "css-classname": "^1.1.3",
     "debounce": "^1.0.0",
