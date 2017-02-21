@@ -6,13 +6,15 @@ import { fork } from 'child_process'
 // npm
 import getPort from 'get-port'
 import uuid from 'uuid'
+import plur from 'plur'
 
 // webpack
 import RequestShortener from 'webpack/lib/RequestShortener.js'
 
 // local
 import Builder from '../util/builder'
-import IPCHandler from '../util/ipc.js'
+import IPCHandler from '../util/ipc'
+import { toTimeString } from '../../util'
 
 const DEFAULT_PORT = Symbol('default port')
 
@@ -50,12 +52,33 @@ export default class WebpackHandler extends Builder {
         ELECTRON_RUN_AS_NODE: 1
       }
     })
-    this._proc.stdout.on('data', val => console.log(String(val)))
-    this._proc.stderr.on('data', val => console.warn(String(val)))
+    this._proc.stdout.on('data', message => {
+      message = String(message)
+      this._log({
+        message,
+        type: 'log'
+      })
+      this.emit('log', message)
+    })
+    this._proc.stderr.on('data', message => {
+      message = String(message)
+      this._log({
+        message,
+        type: 'error'
+      })
+      this.emit('log-error', message)
+    })
 
     this._ipc = new IPCHandler(this._proc)
     this._ipc.on('set stats', stats => this.setStats(stats))
-    this._ipc.on('built', () => this.emit('built'))
+    this._ipc.on('built', () => {
+      this.emit('built')
+      this._log(`Build completed with ${this.errors.length} ${plur('error', this.errors.length)} and ${this.warnings.length} ${plur('warning', this.warnings.length)}, taking ${toTimeString(this.stats.time / 1000)}.`)
+      this._log({
+        message: 'Build \u001b[1m' + (this.buildOK() ? 'Succeeded' : 'Failed') + '\u001b[22m', // bold
+        type: 'separator'
+      })
+    })
     this._ipc.on('update progress', stuff => this.updateProgress(stuff))
     return this._ipc.send('init', {
       port,

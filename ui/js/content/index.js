@@ -7,6 +7,7 @@ import BundleAnalysis from './analysis'
 import DetailView from './detail-view'
 import Settings from './settings'
 import Info from './info'
+import Logs from './logs'
 import Tab from './tab'
 
 export default class Content extends React.Component {
@@ -43,6 +44,10 @@ export default class Content extends React.Component {
     }, {
       title: 'Bundle Analysis',
       content: <BundleAnalysis />
+    }, {
+      title: 'Logs',
+      icon: 'tasks',
+      content: <Logs logs={this.props.logs} />
     }, {
       title: 'Settings',
       icon: 'cog',

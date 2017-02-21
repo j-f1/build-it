@@ -13,6 +13,8 @@ import Content from './content'
 
 import { settings } from './settings'
 
+import 'react-ansi-style/inject-css'
+
 class App extends React.Component {
   constructor (...args) {
     super(...args)
@@ -34,7 +36,7 @@ class App extends React.Component {
       shortHashLength: 7
     })
 
-    this.forceUpdate = this.forceUpdate.bind(this)
+    this._forceUpdate = () => this.forceUpdate()
 
     window.focusHandler.on('focus', this._focus).on('blur', this._blur)
   }
@@ -82,6 +84,8 @@ class App extends React.Component {
     }).then(() => webpack.start())
     webpack.task.on('change', this._updateTask)
     webpack.on('built', this._built)
+    webpack.on('log', this._forceUpdate)
+    webpack.on('log-error', this._forceUpdate)
     settings.events.on('change', this._settingsDidChange)
   }
   componentWillUnmount () {
@@ -90,6 +94,8 @@ class App extends React.Component {
     const webpack = this.state.webpack
     webpack.task.removeListener('change', this._updateTask)
     webpack.removeListener('built', this._built)
+    webpack.removeListener('log', this._forceUpdate)
+    webpack.removeListener('log-error', this._forceUpdate)
     webpack.kill()
     settings.events.removeListener('change', this._settingsDidChange)
   }
@@ -146,6 +152,7 @@ class App extends React.Component {
       <Content
         warnings={this.state.webpack.warnings}
         errors={this.state.webpack.errors}
+        logs={this.state.webpack.logs}
         analyzer={this.state.webpack.opts.visualizerOutput}
         stats={this.state.webpack.stats}
         status={this.state.webpack}

@@ -13,6 +13,7 @@ export default class Builder extends EventEmitter {
       task: 'Building',
       label: []
     }, defaults, opts)
+    this.logs = []
     if (!Array.isArray(this.opts.task)) {
       this.opts.task = [this.opts.task]
     }
@@ -69,6 +70,18 @@ export default class Builder extends EventEmitter {
   }
   setStats (stats) {
     this.stats = stats
+  }
+  _log (message) {
+    if (typeof message === 'string') {
+      return this._log({
+        message
+      })
+    }
+    message.date = new Date()
+    if (!message.type) {
+      message.type = 'log'
+    }
+    this.logs.push(message)
   }
 
   async init () {

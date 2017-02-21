@@ -1,6 +1,5 @@
 import React from 'react'
 import ansiStyle from 'react-ansi-style'
-import 'react-ansi-style/inject-css'
 
 function Text ({ children, highlight = true }) {
   let content

@@ -49,6 +49,7 @@
     "normalize.css": "^5.0.0",
     "observable": "^2.1.4",
     "pkginfo": "^0.4.0",
+    "plur": "^2.1.2",
     "prefixfree": "^1.0.0",
     "pretty-bytes": "^4.0.2",
     "promisify-node": "^0.4.0",
