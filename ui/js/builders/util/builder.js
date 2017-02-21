@@ -13,7 +13,6 @@ export default class Builder extends EventEmitter {
       task: 'Building',
       label: []
     }, defaults, opts)
-    this.logs = []
     if (!Array.isArray(this.opts.task)) {
       this.opts.task = [this.opts.task]
     }
@@ -21,6 +20,7 @@ export default class Builder extends EventEmitter {
       this.opts.label = [this.opts.label]
     }
 
+    this.logs = []
     this._name = className
 
     window.addEventListener('beforeunload', () => {
@@ -82,6 +82,9 @@ export default class Builder extends EventEmitter {
       message.type = 'log'
     }
     this.logs.push(message)
+  }
+  clearLogs () {
+    this.logs = []
   }
 
   async init () {
