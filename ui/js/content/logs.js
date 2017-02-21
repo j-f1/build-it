@@ -112,7 +112,8 @@ function Log (props) {
         fontSize: '0.75em'
       },
       message: {
-        flex: 1
+        flex: 1,
+        userSelect: 'initial'
       }
     },
     'type-error': {
