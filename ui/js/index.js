@@ -87,9 +87,10 @@ class App extends React.Component {
   componentWillUnmount () {
     window.focusHandler.removeListener('focus', this._focus)
     window.focusHandler.removeListener('blur', this._blur)
-    this.state.webpack.task.removeListener('change', this._updateTask)
-    this.state.webpack.removeListener('built', this._built)
-    this.state.webpack.kill()
+    const webpack = this.state.webpack
+    webpack.task.removeListener('change', this._updateTask)
+    webpack.removeListener('built', this._built)
+    webpack.kill()
     settings.events.removeListener('change', this.forceUpdate)
   }
   toggleWindow () {
