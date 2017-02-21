@@ -57,6 +57,7 @@
     "react-ansi-style": "^1.0.0",
     "react-dom": "^15.4.2",
     "react-fontawesome": "^1.5.0",
+    "react-inspector": "^1.1.2",
     "react-tabs": "^0.8.2",
     "react-transition-group": "^1.0.0",
     "reactcss": "^1.1.1",

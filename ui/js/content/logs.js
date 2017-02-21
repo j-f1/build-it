@@ -1,6 +1,7 @@
 import moment from 'moment'
 import React from 'react'
 import ansiStyle from 'react-ansi-style'
+import Inspector from 'react-inspector'
 import stripANSI from 'strip-ansi'
 
 import FA from 'react-fontawesome'
@@ -125,7 +126,15 @@ function Log (props) {
       }
     }
   }, props)
-  return <p style={styles.container}><span style={styles.message}>{message ? ansiStyle(React, message) : <em>No message</em>}</span><span style={styles.date}>{niceDate}</span></p>
+  let realMessage
+  if (message) {
+    try {
+      realMessage = <Inspector data={JSON.parse(message)} />
+    } catch (e) {
+      realMessage = ansiStyle(React, message)
+    }
+  }
+  return <p style={styles.container}><span style={styles.message}>{realMessage || <em>No message</em>}</span><span style={styles.date}>{niceDate}</span></p>
 }
 
 function Separator ({ message, date, ...props }) {
