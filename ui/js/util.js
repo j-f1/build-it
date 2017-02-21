@@ -135,6 +135,8 @@ function _Input (props) {
         transition: 'box-shadow .25s cubic-bezier(0.165, 0.840, 0.440, 1)' // easeOutQuart
       },
       input: {
+        flex: 1,
+        width: '100%',
         border: '1px solid',
         borderColor: '#BFBFBF',
         transition: 'border .25s cubic-bezier(0.165, 0.840, 0.440, 1)', // easeOutQuart

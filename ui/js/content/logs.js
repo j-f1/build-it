@@ -1,28 +1,93 @@
 import moment from 'moment'
 import React from 'react'
 import ansiStyle from 'react-ansi-style'
+import stripANSI from 'strip-ansi'
 
-import { st } from '../util'
+import FA from 'react-fontawesome'
+import { st, Input } from '../util'
 
-export default function Logs (props) {
-  const { logs, hidden } = props
-  const styles = st({
-    default: {
-      container: {
-        paddingBottom: 0.02,
-        background: '#ECECEC'
-      }
+export default class Logs extends React.Component {
+  constructor (...args) {
+    super(...args)
+    this._toggleFiltering = this._toggleFiltering.bind(this)
+    this._filter = this._filter.bind(this)
+    this.state = {
+      filtering: false,
+      filter: ''
     }
-  })
-  return <div hidden={hidden} style={Object.assign({}, props.style)}>
-    <div style={styles.container}>
-      {[...logs].reverse().map((log, i) => <Log
-        key={(+log.date) + String(log.message)}
-        {...st.loop(i, logs.length)}
-        {...log}
-      />)}
+  }
+  _toggleFiltering () {
+    this.setState(({ filtering }) => ({
+      filtering: !filtering
+    }))
+  }
+  _filter (e) {
+    this.setState({
+      filter: e.target.value
+    })
+  }
+  render () {
+    const { logs, hidden, clearLogs } = this.props
+    const styles = st({
+      default: {
+        container: {
+          paddingBottom: 0.02,
+          background: '#ECECEC',
+          overflow: 'auto'
+        },
+        bar: {
+          display: 'flex',
+          alignItems: 'center',
+          borderBottom: '1px solid #CCC',
+          marginBottom: -1,
+          flexShrink: 0,
+          zIndex: 100,
+          height: '2.5em',
+          padding: '0 4px'
+        },
+        barItem: {
+          cursor: 'pointer',
+          margin: '0 4px'
+        },
+        input: {
+          width: 0,
+          opacity: 0,
+          transition: 'all 0.4s'
+        }
+      },
+      filtering: {
+        input: {
+          width: 175,
+          opacity: 1
+        }
+      }
+    }, this.state)
+    let orderedLogs = [...logs].reverse()
+    if (this.state.filtering) {
+      orderedLogs = orderedLogs.filter(log => stripANSI(log.message).toLowerCase().match(this.state.filter.trim()))
+    }
+    return <div
+      hidden={hidden}
+      style={Object.assign({
+        display: 'flex',
+        flexDirection: 'column'
+      }, this.props.style)}>
+      <div style={styles.bar}>
+        <FA name='trash' style={styles.barItem} fixedWidth onClick={clearLogs} />
+        <FA name='filter' style={styles.barItem} fixedWidth onClick={this._toggleFiltering} />
+        <Input style={Object.assign({}, styles.barItem, styles.input)} placeholder='Filter…' onChange={this._filter} value={this.state.filter} />
+      </div>
+      <div style={Object.assign({}, orderedLogs[0] && orderedLogs[0].type === 'separator' && {
+        marginTop: '1em'
+      }, styles.container)}>
+        {orderedLogs.map((log, i) => <Log
+          key={(+log.date) + String(log.message)}
+          {...st.loop(i, logs.length)}
+          {...log}
+        />)}
+      </div>
     </div>
-  </div>
+  }
 }
 
 function Log (props) {
@@ -85,12 +150,6 @@ function Separator ({ message, date, ...props }) {
         height: 'calc(50% - 0.5px)',
         zIndex: -1,
         background: 'white'
-      }
-    },
-    'first-child': {
-      container: {
-        padding: 'calc(1em + 1px) 0',
-        margin: '-1px 0 calc(-1em - 1px)'
       }
     }
   }, props)

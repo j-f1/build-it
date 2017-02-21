@@ -31,6 +31,7 @@ class App extends React.Component {
     })
     this._built = this._built.bind(this)
     this._settingsDidChange = this._settingsDidChange.bind(this)
+    this._clearLogs = this._clearLogs.bind(this)
     settings.defaults({
       env: 'dev',
       shortHashLength: 7
@@ -39,6 +40,11 @@ class App extends React.Component {
     this._forceUpdate = () => this.forceUpdate()
 
     window.focusHandler.on('focus', this._focus).on('blur', this._blur)
+  }
+
+  _clearLogs () {
+    this.state.webpack.clearLogs()
+    this.forceUpdate()
   }
 
   _built (err) {
@@ -153,6 +159,7 @@ class App extends React.Component {
         warnings={this.state.webpack.warnings}
         errors={this.state.webpack.errors}
         logs={this.state.webpack.logs}
+        clearLogs={this._clearLogs}
         analyzer={this.state.webpack.opts.visualizerOutput}
         stats={this.state.webpack.stats}
         status={this.state.webpack}

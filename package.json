@@ -60,6 +60,7 @@
     "react-tabs": "^0.8.2",
     "react-transition-group": "^1.0.0",
     "reactcss": "^1.1.1",
+    "strip-ansi": "^3.0.1",
     "title-case": "^2.1.0",
     "uuid": "^3.0.1",
     "weak": "^1.0.1",
