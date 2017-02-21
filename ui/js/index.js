@@ -91,7 +91,7 @@ class App extends React.Component {
     webpack.task.removeListener('change', this._updateTask)
     webpack.removeListener('built', this._built)
     webpack.kill()
-    settings.events.removeListener('change', this.forceUpdate)
+    settings.events.removeListener('change', this._settingsDidChange)
   }
   toggleWindow () {
     this.setState(({ expanded }) => ({
