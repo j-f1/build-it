@@ -3,6 +3,7 @@ import { classJoin } from 'css-classname'
 import info from 'pkginfo'
 import React from 'react'
 import depd from 'depd'
+import plur from 'plur'
 
 import css from './css'
 
@@ -97,14 +98,26 @@ export function cancel (event) {
   event.stopPropagation()
 }
 
+export function round (num, places) {
+  // from  http://stackoverflow.com/a/12830454/5244995
+  var number = Math.round(num * Math.pow(10, places)) / Math.pow(10, places)
+  if (num - number > 0) {
+    return (number + Math.floor(2 * Math.round((num - number) * Math.pow(10, (places + 1))) / 10) / Math.pow(10, places))
+  } else {
+    return number
+  }
+}
+
 export function toTimeString (sec) {
   sec = Math.abs(sec)
   if (sec < 1) {
     return `${Math.round(sec * 1000)}ms`
   } else if (sec < 10) {
-    return `${Math.round(sec, 2)} seconds`
+    const Δt = round(sec, 2)
+    return `${Δt} ${plur('second', Δt)}`
   } else if (sec < 60) {
-    return `${Math.round(sec, 1)} seconds`
+    const Δt = round(sec, 1)
+    return `${Δt} ${plur('second', Δt)}`
   } else if (sec < (60 * 60)) {
     return `${Math.round(sec / 60)} min ${toTimeString(sec % 60)}`
   }
