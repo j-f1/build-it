@@ -83,7 +83,8 @@ export default class WebpackHandler extends Builder {
     this._log('Starting webpack…')
     return this._ipc.send('init', {
       port,
-      opts: Object.assign({}, this.opts, opts)
+      opts: Object.assign({}, this.opts, opts),
+      root: path.join(window.__dirname, '..', 'node_modules')
     })
   }
   start () {

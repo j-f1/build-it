@@ -3,13 +3,6 @@
 const EventEmitter = require('events')
 const path = require('path')
 
-// webpack
-const webpack = require('webpack')
-
-// webpack plugins
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const DashboardPlugin = require('webpack-dashboard/plugin')
-
 const ipc = new EventEmitter()
 process.on('message', ({ message, id, data }) => {
   const cb = reply => {
@@ -24,7 +17,28 @@ function emit (message, data) {
   })
 }
 
-ipc.once('init', (cb, { opts, port }) => {
+function _genPaths (loc) {
+  const paths = []
+  while (loc.length && loc !== '/') {
+    paths.push(path.join(loc, 'node_modules'))
+    loc = path.dirname(loc)
+  }
+  return paths
+}
+
+var _ns = {}
+
+ipc.once('init', (cb, { opts, port, root: $root }) => { // `root` is a deprecated alias for `global`
+  process.chdir(path.dirname(opts.configPath))
+  module.paths = _genPaths(path.dirname(opts.configPath))
+
+  // webpack
+  const webpack = require('webpack')
+
+  // webpack plugins
+  _ns.BundleAnalyzerPlugin = require(path.join($root, 'webpack-bundle-analyzer')).BundleAnalyzerPlugin
+  _ns.DashboardPlugin = require(path.join($root, 'webpack-dashboard/plugin'))
+
   const config = require(opts.configPath)
   const compiler = webpack(transform(config, Object.assign({}, opts, {
     port,
@@ -79,11 +93,11 @@ function transform (config, opts) {
 }
 function _transform (config, { progress, port, visualizerOutput }) {
   if (!config.plugins) config.plugins = []
-  config.plugins.unshift(new DashboardPlugin({
+  config.plugins.unshift(new _ns.DashboardPlugin({
     port,
     handler: progress
   }))
-  config.plugins.unshift(new BundleAnalyzerPlugin({
+  config.plugins.unshift(new _ns.BundleAnalyzerPlugin({
     reportFilename: path.join(...('..!'.repeat(100).split('!')), visualizerOutput),
     openAnalyzer: false,
     logLevel: 'warn',
