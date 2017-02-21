@@ -80,20 +80,24 @@ export default class WebpackHandler extends Builder {
       })
     })
     this._ipc.on('update progress', stuff => this.updateProgress(stuff))
+    this._log('Starting webpack…')
     return this._ipc.send('init', {
       port,
       opts: Object.assign({}, this.opts, opts)
     })
   }
   start () {
+    this._log('Watching files…')
     return this._ipc.send('start')
   }
   stop () {
+    this._log('Watching stopped')
     return this._ipc.send('stop')
   }
   kill () {
     return this.stop().then(() => {
       this._proc.kill()
+      this._log('webpack process killed')
     })
   }
   buildOK () {
