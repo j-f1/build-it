@@ -10,3 +10,5 @@ The modules section expands:
 ![Modules](screenshots/modules.png)  
 There are settings, although they’re not that complicated right now:  
 ![Settings](screenshots/settings.png)
+build-it also keeps every message logged during the build:
+![Logs](screenshots/logs.png)
