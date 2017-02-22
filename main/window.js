@@ -34,5 +34,6 @@ exports = module.exports = {
       wins.delete(w)
     })
     return w
-  }
+  },
+  windowList: wins
 }

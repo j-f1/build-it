@@ -4,7 +4,7 @@ const { REACT_DEVELOPER_TOOLS, REACT_PERF, default: installExtension } = require
 
 const { expand, shrink } = require('./resizer')
 const getMenu = require('./menu')
-const { createWindow } = require('./window')
+const { createWindow, windowList } = require('./window')
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -24,12 +24,19 @@ app.on('ready', () => {
 function open () {
   dialog.showOpenDialog({
     properties: ['openDirectory']
-  }, ([path]) => {
+  }, (paths) => {
+    if (!paths) return
     createWindow({
-      path
+      path: paths[0]
     })
   })
 }
+
+app.on('activate', function () {
+  if (windowList.size === 0) {
+    open()
+  }
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
