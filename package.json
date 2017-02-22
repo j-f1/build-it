@@ -22,7 +22,6 @@
     "build-electron-app": "^0.1.0",
     "css-loader": "^0.26.1",
     "electron": "^1.4.15",
-    "electron-inspector": "^0.1.4",
     "electron-prebuilt": "^1.4.13",
     "electron-rebuild": "^1.5.6",
     "node-inspector": "^0.12.8",
