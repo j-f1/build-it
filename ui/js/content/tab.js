@@ -47,6 +47,9 @@ function _TabContent (props, context) {
         backgroundImage: 'linear-gradient(to bottom, hsl(0, 0%, 87%), hsl(0, 0%, 82%))',
         backgroundSize: '100% 100%',
         color: 'hsla(0, 0%, 0%, 0.7)'
+      },
+      icon: {
+        fontSize: '1rem'
       }
     },
     blurred: {
@@ -87,7 +90,7 @@ function _TabContent (props, context) {
   return <div style={props.selected
     ? Object.assign({}, styles.tab, styles.activeTab)
     : styles.tab}>
-    {props.icon && <FA name={props.icon} style={(props.items || []).length ? props.iconStyle : {}} />}
+    {props.icon && <FA name={props.icon} style={Object.assign({}, styles.icon, (props.items || []).length && props.iconStyle)} />}
     {props.pinned || `\u{200B} ${props.items ? props.items.length : ''} ${props.title}${(!props.items || props.items.length === 1) ? '' : props.plural}`}
   </div>
 }
