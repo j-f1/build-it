@@ -78,9 +78,7 @@ export default class Logs extends React.Component {
         <FA name='filter' style={styles.barItem} fixedWidth onClick={this._toggleFiltering} />
         <Input style={Object.assign({}, styles.barItem, styles.input)} placeholder='Filter…' onChange={this._filter} value={this.state.filter} />
       </div>
-      <div style={Object.assign({}, orderedLogs[0] && orderedLogs[0].type === 'separator' && {
-        marginTop: '1em'
-      }, styles.container)}>
+      <div style={styles.container}>
         {orderedLogs.map((log, i) => <Log
           key={(+log.date) + String(log.message)}
           {...st.loop(i, logs.length)}
@@ -160,16 +158,29 @@ function Separator ({ message, date, ...props }) {
         height: 'calc(50% - 0.5px)',
         zIndex: -1,
         background: 'white'
+      },
+      top: {
+        top: 0
+      },
+      bottom: {
+        bottom: 0
+      }
+    },
+    'first-child': {
+      container: {
+        padding: 'calc(1px + 1em) 0px 1px'
+      },
+      top: {
+        height: 'calc(50% - 0.5px + 0.5em)'
+      },
+      bottom: {
+        height: 'calc(50% - 0.5px - 0.5em)'
       }
     }
   }, props)
   return <div style={styles.container}>
     <span style={styles.label}>{message && ansiStyle(React, message)}{message && ' — '}{moment(date).calendar()}</span>
-    <span style={Object.assign({
-      top: 0
-    }, styles.background)} />
-    <span style={Object.assign({
-      bottom: 0
-    }, styles.background)} />
+    <span style={Object.assign({}, styles.background, styles.top)} />
+    <span style={Object.assign({}, styles.background, styles.bottom)} />
   </div>
 }
