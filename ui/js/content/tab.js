@@ -35,6 +35,7 @@ function _TabContent (props, context) {
         lineHeight: '15px',
         outline: 'none',
         backgroundPosition: '0 0',
+        fontSize: 13,
 
         borderTop: '1px solid',
         borderLeft: '1px solid',
