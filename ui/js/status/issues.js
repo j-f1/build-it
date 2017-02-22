@@ -87,6 +87,9 @@ class Issue extends React.Component {
     return <_IssueContent {...rest} style={Object.assign({}, style, this._animStyle())} ref_={el => { this._el = el }} />
   }
 }
+Issue.propTypes = {
+  style: React.propTypes.object
+}
 
 const _IssueContent = st.handleActive((props) => {
   const { issue } = props

@@ -19,7 +19,7 @@ export default class Status extends React.Component {
     this.state = {
       dropDownOpened: false,
       lastTask: null,
-      lastCount: 0
+      lastLength: 0
     }
     this[_.toggleDropDown] = this[_.toggleDropDown].bind(this)
   }
@@ -31,7 +31,7 @@ export default class Status extends React.Component {
   componentWillReceiveProps (newProps) {
     if (!newProps.tasks.length && this.props.tasks[0]) {
       this.setState({
-        lastCount: this.props.tasks.count,
+        lastLength: this.props.tasks.length,
         lastTask: this.props.tasks[0]
       })
     }
@@ -71,7 +71,7 @@ export default class Status extends React.Component {
     return <div style={styles.container}>
       <TitleBarItem button={false} component='section' style={styles.item}>
         <Indicator
-          count={tasks.length || this.state.lastCount}
+          count={tasks.length || this.state.lastLength}
           hidden={tasks.length < 2}
           onClick={this[_.toggleDropDown]}
         />
@@ -100,4 +100,8 @@ export default class Status extends React.Component {
 Status.defaultProps = {
   tasks: [],
   issues: {}
+}
+Status.propTypes = {
+  tasks: React.propTypes.array,
+  issues: React.propTypes.object
 }

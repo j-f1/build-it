@@ -22,3 +22,9 @@ export default class BundleAnalysis extends React.Component {
     return <webview hidden={this.props.hidden} ref={this._webviewRef} src={this.props.analyzer} style={this.props.style} />
   }
 }
+BundleAnalysis.propTypes = {
+  status: React.propTypes.object.isRequired,
+  analyzer: React.propTypes.string.isRequired,
+  style: React.propTypes.object,
+  hidden: React.propTypes.bool.isRequired
+}

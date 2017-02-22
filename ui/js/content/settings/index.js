@@ -112,3 +112,13 @@ export default class Settings extends React.Component {
     </section></form>
   }
 }
+
+Settings.propTypes = {
+  settings: React.propTypes.shape({
+    shortHashLength: React.propTypes.number.isRequired,
+    env: React.propTypes.string.isRequired,
+    style: React.propTypes.object,
+    hidden: React.propTypes.bool,
+    commit: React.propTypes.func.isRequired
+  }).isRequired
+}

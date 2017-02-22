@@ -127,4 +127,11 @@ export default class Content extends React.Component {
     </div>
   }
 }
+
 Content.contextTypes = ctxt('blurred')
+Content.propTypes = {
+  warnings: React.propTypes.array.isRequired,
+  errors: React.propTypes.array.isRequired,
+  stats: React.propTypes.object.isRequired,
+  logs: React.propTypes.array.isRequired
+}
