@@ -59,7 +59,7 @@ module.exports = (envArg) => {
 
   const conf = {
     target: 'electron',
-    entry: ['babel-polyfill', 'normalize.css', 'prefixfree', './ui/js/index.js'],
+    entry: ['babel-polyfill', 'normalize.css', './ui/js/index.js'],
     output: {
       filename: './ui/index.js'
     },

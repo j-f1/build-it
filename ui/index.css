@@ -5,8 +5,8 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0;
-  font-family: -apple-system, SF UI Text, San Fransico Text, San Francisco, Helvetica Neue, Helvetica, Segoe UI, sans-serif;
-  user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, SF UI Text, San Fransico Text, San Francisco, Helvetica Neue, Helvetica, Segoe UI, sans-serif;
+  -webkit-user-select: none;
   overflow: hidden;
   cursor: default;
 }
