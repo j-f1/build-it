@@ -97,5 +97,4 @@ export default class Builder extends EventEmitter {
   stop () {
     throw new Error('must specify a stop function')
   }
-
 }

@@ -14,7 +14,7 @@ function _TitleBarItem (props, context) {
   }
   const Component = props.component
   const { active, button, component, style, ...rest } = props
-  component
+  component // eslint-disable-line no-unused-expressions
   const styles = st({
     default: {
       item: {
