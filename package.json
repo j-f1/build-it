@@ -23,8 +23,8 @@
     "css-loader": "^0.26.1",
     "electron": "^1.4.15",
     "electron-rebuild": "^1.5.6",
-    "standard": "^8.6.0",
-    "standard-loader": "^5.0.0",
+    "standard": "^9.0.1",
+    "standard-loader": "^6.0.1",
     "style-loader": "^0.13.1"
   },
   "dependencies": {
@@ -34,7 +34,7 @@
     "eases": "^1.0.8",
     "electron-devtools-installer": "^2.0.1",
     "electron-menu": "^1.0.0",
-    "get-port": "^2.1.0",
+    "get-port": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.17.1",
     "normalize.css": "^5.0.0",
