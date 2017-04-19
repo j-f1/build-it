@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
 import StatusDropDown from './status-drop-down'
@@ -102,6 +103,6 @@ Status.defaultProps = {
   issues: {}
 }
 Status.propTypes = {
-  tasks: React.propTypes.array,
-  issues: React.propTypes.object
+  tasks: PropTypes.array,
+  issues: PropTypes.object
 }

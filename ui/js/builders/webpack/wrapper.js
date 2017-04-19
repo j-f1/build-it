@@ -63,6 +63,7 @@ ipc.once('init', (cb, { opts, port, root: $root }) => { // `root` is a deprecate
     _stop = watching.close
     cb()
   })
+  /* eslint-disable standard/no-callback-literal */
   ipc.on('stop', (cb) => {
     if (!_stop) {
       cb(false)
@@ -72,6 +73,7 @@ ipc.once('init', (cb, { opts, port, root: $root }) => { // `root` is a deprecate
       cb(true)
     })
   })
+  /* eslint-enable standard/no-callback-literal */
   cb()
 })
 
@@ -274,7 +276,7 @@ const clone = (function () {
       } else if (clone.__isDate(parent)) {
         child = new Date(parent.getTime())
       } else if (useBuffer && Buffer.isBuffer(parent)) {
-        child = new Buffer(parent.length)
+        child = Buffer.alloc(parent.length)
         parent.copy(child)
         return child
       } else if (parent instanceof Error) {

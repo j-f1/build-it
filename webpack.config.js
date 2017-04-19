@@ -26,6 +26,7 @@ const getExternals = (modules) => {
     ob[name] = `require("${name.replace('"', '\\"')}")`
   })
   delete ob['normalize.css']
+  delete ob['opinionate.css']
   return ob
 }
 
@@ -59,7 +60,7 @@ module.exports = (envArg) => {
 
   const conf = {
     target: 'electron',
-    entry: ['babel-polyfill', 'normalize.css', './ui/js/index.js'],
+    entry: ['babel-polyfill', 'normalize.css', 'opinionate.css', './ui/js/index.js'],
     output: {
       filename: './ui/index.js'
     },

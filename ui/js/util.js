@@ -1,4 +1,5 @@
 import reactCSS, * as _reactCSSKeys from 'reactcss'
+import PropTypes from 'prop-types'
 import info from 'pkginfo'
 import React from 'react'
 import plur from 'plur'
@@ -51,10 +52,10 @@ export const res = {
 
 const contextTypes = {}
 registerCtxt('blurred', {
-  blurred: React.PropTypes.bool
+  blurred: PropTypes.bool
 })
 registerCtxt('mini', {
-  mini: React.PropTypes.bool
+  mini: PropTypes.bool
 })
 
 export function registerCtxt (type, value) {

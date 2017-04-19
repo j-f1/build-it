@@ -1,5 +1,6 @@
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import FA from 'react-fontawesome'
+import PropTypes from 'prop-types'
 import { sineInOut } from 'eases'
 import React from 'react'
 
@@ -45,6 +46,7 @@ function animate (from, to, duration, cb) {
       cb(current, false)
       window.requestAnimationFrame(_doWork)
     } else {
+      // eslint-disable-next-line standard/no-callback-literal
       cb(1, true)
     }
   }
@@ -88,7 +90,7 @@ class Issue extends React.Component {
   }
 }
 Issue.propTypes = {
-  style: React.propTypes.object
+  style: PropTypes.object
 }
 
 const _IssueContent = st.handleActive((props) => {

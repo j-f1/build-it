@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import debounce from 'debounce'
 import React from 'react'
 
@@ -114,11 +115,11 @@ export default class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  settings: React.propTypes.shape({
-    shortHashLength: React.propTypes.number.isRequired,
-    env: React.propTypes.string.isRequired,
-    style: React.propTypes.object,
-    hidden: React.propTypes.bool,
-    commit: React.propTypes.func.isRequired
+  settings: PropTypes.shape({
+    shortHashLength: PropTypes.number.isRequired,
+    env: PropTypes.string.isRequired,
+    style: PropTypes.object,
+    hidden: PropTypes.bool,
+    commit: PropTypes.func.isRequired
   }).isRequired
 }

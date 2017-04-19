@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import Combokeys from 'combokeys'
 import React from 'react'
 
@@ -130,8 +131,8 @@ export default class Content extends React.Component {
 
 Content.contextTypes = ctxt('blurred')
 Content.propTypes = {
-  warnings: React.propTypes.array.isRequired,
-  errors: React.propTypes.array.isRequired,
-  stats: React.propTypes.object.isRequired,
-  logs: React.propTypes.array.isRequired
+  warnings: PropTypes.array.isRequired,
+  errors: PropTypes.array.isRequired,
+  stats: PropTypes.object.isRequired,
+  logs: PropTypes.array.isRequired
 }

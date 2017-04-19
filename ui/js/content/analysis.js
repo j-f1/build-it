@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
 export default class BundleAnalysis extends React.Component {
@@ -23,8 +24,8 @@ export default class BundleAnalysis extends React.Component {
   }
 }
 BundleAnalysis.propTypes = {
-  status: React.propTypes.object.isRequired,
-  analyzer: React.propTypes.string.isRequired,
-  style: React.propTypes.object,
-  hidden: React.propTypes.bool.isRequired
+  status: PropTypes.object.isRequired,
+  analyzer: PropTypes.string.isRequired,
+  style: PropTypes.object,
+  hidden: PropTypes.bool.isRequired
 }
